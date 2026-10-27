@@ -1,9 +1,11 @@
 {
   "experiment_id": "resnet18_layer3_v3",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet18-improved",
   "kernel_version": 3,
-  "observed_running_at_utc": "2026-10-27T09:23:48Z",
+  "cuda_confirmed_at_utc": "2026-10-27T09:26:24Z",
+  "completed_at_utc": "2026-10-27T10:18:42Z",
+  "elapsed_wall_time_minutes_approx": 52,
   "cuda_available": true,
   "gpu_name": "Tesla T4",
   "train_samples": 25602,
@@ -24,9 +26,11 @@
   "baseline_validation_accuracy": 0.7830026558350258,
   "submission_validation_threshold": 0.8,
   "target_public_score": 0.79164,
-  "latest_epoch": 9,
-  "latest_train_accuracy": 0.9944,
-  "best_epoch": 9,
-  "best_validation_accuracy": 0.8269,
-  "public_score": null
+  "latest_epoch": 12,
+  "latest_train_accuracy": 0.9980,
+  "best_epoch": 12,
+  "best_validation_accuracy": 0.8286,
+  "submission_ref": 57698008,
+  "public_score": 0.82057,
+  "private_score": null
 }

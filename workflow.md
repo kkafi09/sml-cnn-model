@@ -188,15 +188,28 @@ python scripts/build_kaggle_kernel.py --username <username>
 kaggle kernels push -p kaggle_kernel --accelerator NvidiaTeslaT4 --timeout 7200
 ```
 
-Jika eksperimen pertama telah selesai dan diperlukan kandidat lain, opsi ResNet-50 dapat disiapkan dengan `python scripts/build_kaggle_kernel.py --username <username> --architecture resnet50 --slug document-classification-resnet50-v1`. Periksa kembali kuota GPU dan batas submission sebelum menjalankan eksperimen berikutnya. Gunakan folder hasil dan catatan eksperimen yang berbeda untuk tiap run.
-
-Eksperimen pertama `resnet18_layer3_v1` pada versi kernel 1 berakhir dengan `CANCEL_ACKNOWLEDGED` dan log kosong. Versi kernel 2 mengonfirmasi Tesla T4 tetapi berhenti sebelum training karena CSV tidak ditemukan; runner diperbaiki untuk mencari mount kompetisi hingga tiga tingkat. Run v3 akan memakai kernel `muhammadkafanalkafi/document-classification-resnet18-improved`. Setiap percobaan disimpan di file terpisah dalam `reports/experiments/`. Setelah run sukses, unduh output ke direktori khusus dan baca `reports/validation_result.json` serta `reports/training_history.csv`. Jalankan perintah berikut dari root repository untuk memeriksa dan mengirim satu kandidat yang sudah memenuhi target:
+Untuk iterasi selanjutnya, siapkan ResNet-50 dengan padding agar rasio halaman tetap terjaga. Konfigurasi diringkas di `reports/experiments/resnet50_aspect_v1.json`:
 
 ```bash
-mkdir -p kaggle_kernel_outputs/resnet18_layer3_v1
-kaggle kernels output muhammadkafanalkafi/document-classification-resnet18-improved \
-  -p kaggle_kernel_outputs/resnet18_layer3_v1
-python scripts/submit_candidate.py --experiment-dir kaggle_kernel_outputs/resnet18_layer3_v1
+python scripts/build_kaggle_kernel.py \
+  --username muhammadkafanalkafi \
+  --slug document-classification-resnet50-v1 \
+  --architecture resnet50 \
+  --unfreeze-from layer3 \
+  --preserve-aspect-ratio \
+  --epochs 4 \
+  --patience 2 \
+  --learning-rate 0.00005
+kaggle kernels push -p kaggle_kernel --accelerator NvidiaTeslaT4 --timeout 7200
+```
+
+Eksperimen pertama `resnet18_layer3_v1` pada versi kernel 1 berakhir dengan `CANCEL_ACKNOWLEDGED` dan log kosong. Versi kernel 2 mengonfirmasi Tesla T4 tetapi berhenti sebelum training karena CSV tidak ditemukan. Versi kernel 3 selesai dengan validation accuracy `0.82862` dan submission ref `57698008`; public score `0.82057`. Setiap percobaan disimpan terpisah dalam `reports/experiments/`. Setelah kernel baru selesai, unduh output ke direktori khusus dan periksa laporan serta history. Contoh langkah untuk run v3 yang sudah selesai:
+
+```bash
+mkdir -p kaggle_kernel_outputs/resnet18_layer3_v3
+kaggle kernels output muhammadkafanalkafi/document-classification-resnet18-improved/3 \
+  -p kaggle_kernel_outputs/resnet18_layer3_v3
+python scripts/submit_candidate.py --experiment-dir kaggle_kernel_outputs/resnet18_layer3_v3
 python scripts/submit_candidate.py --sync-only
 ```
 
