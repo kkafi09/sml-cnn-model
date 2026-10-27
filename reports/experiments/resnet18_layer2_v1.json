@@ -29,14 +29,31 @@
   "max_epochs": 12,
   "early_stopping_patience": 3,
   "requested_accelerator": "NvidiaTeslaT4",
-  "confirmed_accelerator": null,
-  "cuda_available": null,
+  "confirmed_accelerator": "Tesla T4",
+  "cuda_available": true,
   "baseline_validation_accuracy": 0.7830026558350258,
   "submission_validation_threshold": 0.8,
   "target_public_score": 0.79164,
   "previous_best_validation_accuracy": 0.8387751913763475,
   "previous_best_public_score": 0.82852,
-  "observed_epochs": [],
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.2007,
+      "train_accuracy": 0.6463,
+      "validation_loss": 0.8135,
+      "validation_accuracy": 0.7607,
+      "corrupt_images": 1
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7606,
+      "train_accuracy": 0.7743,
+      "validation_loss": 0.6935,
+      "validation_accuracy": 0.7971,
+      "corrupt_images": 1
+    }
+  ],
   "best_validation_accuracy": null,
   "public_score": null,
   "pushed_at_utc": "2026-10-27T13:29:56Z"
