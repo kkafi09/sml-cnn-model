@@ -83,7 +83,7 @@ subprocess.run([sys.executable, str(source / "scripts/predict.py"), "--data-dir"
     (args.output / "run.py").write_text(prefix + runner)
     metadata = {
         "id": f"{args.username}/{args.slug}",
-        "title": f"Document classification {args.architecture} improved",
+        "title": args.slug.replace("-", " "),
         "code_file": "run.py",
         "language": "python",
         "kernel_type": "script",
