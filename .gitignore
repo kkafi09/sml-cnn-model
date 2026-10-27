@@ -1,0 +1,8 @@
+data/
+checkpoint/
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+kaggle_kernel_outputs/

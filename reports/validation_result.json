@@ -1,0 +1,19 @@
+{
+  "best_validation_accuracy": 0.7830026558350258,
+  "best_epoch": 3,
+  "seed": 42,
+  "train_samples": 25602,
+  "validation_samples": 6401,
+  "device": "cpu",
+  "model": "ResNet-18 ImageNet initialization; layer4 and classifier fine-tuned",
+  "corrupt_image_count": 1,
+  "corrupt_image_ids": [
+    "train_08795"
+  ],
+  "train_samples_used": 25601,
+  "validation_samples_used": 6401,
+  "corrupt_train_image_ids": [
+    "train_08795"
+  ],
+  "corrupt_validation_image_ids": []
+}
