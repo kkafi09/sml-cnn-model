@@ -7,3 +7,4 @@ __pycache__/
 .ipynb_checkpoints/
 kaggle_kernel_outputs/
 kaggle_kernel/
+kaggle_kernel_*/
