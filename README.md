@@ -128,7 +128,7 @@ Checkpoint terbaik adalah epoch 3. Validation accuracy naik 4,20 poin persentase
 
 Satu gambar training (`train_08795`) tidak bisa didekode dan dilewati; accuracy train dihitung dari 25.601 gambar yang berhasil dibaca, validation memakai seluruh 6.401 sampel. Detail run ada di `reports/training_history.csv` dan `reports/validation_result.json`, sedangkan ID corrupt dicatat di `reports/corrupt_image_ids.txt`.
 
-Model memprediksi seluruh 7.994 baris test dan menghasilkan `submissions/submission.csv`. File tersebut dikirim ke Kaggle sebagai submission ref `57695733` dengan deskripsi `ResNet18 baseline`. Statusnya `COMPLETE` dan public score yang dilaporkan Kaggle adalah **0,77164**; private score belum tersedia. Skor Kaggle ini berbeda dari validation accuracy 78,30% karena dihitung pada data leaderboard yang terpisah.
+Model memprediksi seluruh 7.994 baris test dan menghasilkan `submissions/submission.csv`. File tersebut dikirim ke Kaggle sebagai submission ref `57695733` dengan deskripsi `ResNet18 baseline`. Statusnya `COMPLETE` dan public leaderboard score yang dilaporkan Kaggle adalah **0,77164 (77,164%)**. Ini adalah skor pada bagian test yang dipakai leaderboard publik; private score belum tersedia, jadi belum ada skor untuk keseluruhan test tersembunyi. Validation accuracy lokal adalah **0,78300 (78,300%)** pada split validation. Jangan menyamakan dua skor tersebut: keduanya berasal dari sampel berbeda. Riwayat terstruktur beserta konfigurasi model tersimpan di [`reports/submission_history.csv`](reports/submission_history.csv).
 
 ## Submission
 

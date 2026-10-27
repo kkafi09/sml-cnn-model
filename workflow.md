@@ -170,7 +170,9 @@ Sebelum submit, cocokkan `id` dan urutannya dengan `data/test.csv`, pastikan ada
 kaggle competitions submissions -c document-image-classification-sd234504
 ```
 
-Setelah perintah submit selesai, simpan `Submission ref` dan deskripsi/model pada log eksperimen. Periksa lagi status serta public score melalui `kaggle competitions submissions`. Jangan menghitung public score sebagai validation accuracy; keduanya berasal dari split yang berbeda. Simpan CSV yang benar-benar dikirim di `submissions/` agar hasil dapat direproduksi. Jangan commit data atau checkpoint besar.
+Setelah perintah submit selesai, simpan `Submission ref` dan deskripsi/model pada `reports/submission_history.csv`. Catat waktu UTC, nama dan konfigurasi model, bobot pretrained, validation accuracy, public score, private score (kosong bila belum tersedia), status, message, dan path CSV. Periksa status serta skor melalui `kaggle competitions submissions`. Public leaderboard score biasanya hanya mencakup bagian test yang dipakai leaderboard publik; jangan menyebutnya skor seluruh test. Private score hanya tersedia jika Kaggle mengungkapkannya. Jangan bandingkan public score dengan validation accuracy seolah-olah berasal dari split yang sama. Simpan CSV yang benar-benar dikirim di `submissions/` agar hasil dapat direproduksi. Jangan commit data atau checkpoint besar.
+
+Untuk memilih perubahan model berikutnya, gunakan validation accuracy sebagai metrik rutin antar eksperimen dengan split/seed yang sama. Gunakan public score sebagai pemeriksaan tambahan pada submission terpilih, bukan sebagai pengganti validation. Catat setiap submission sebagai baris baru, jangan menimpa hasil sebelumnya; gunakan ref dan konfigurasi untuk menghubungkan skor dengan model/CSV yang tepat.
 
 Baseline ResNet-18 telah dikirim dari `submissions/submission.csv` dengan deskripsi `ResNet18 baseline`. Kaggle mengembalikan submission ref `57695733`, status `COMPLETE`, public score `0.77164`; private score belum tersedia. Perintah aktual:
 
