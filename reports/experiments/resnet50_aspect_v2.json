@@ -24,6 +24,16 @@
   "target_public_score": 0.79164,
   "previous_best_validation_accuracy": 0.8286205280424933,
   "previous_best_public_score": 0.82057,
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.3975,
+      "train_accuracy": 0.5846,
+      "validation_loss": 0.9141,
+      "validation_accuracy": 0.7235,
+      "corrupt_images": 1
+    }
+  ],
   "best_validation_accuracy": null,
   "public_score": null
 }
