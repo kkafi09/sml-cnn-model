@@ -27,7 +27,7 @@ def main() -> None:
     validate_metadata(test_frame, "test")
     checkpoint = torch.load(args.checkpoint, map_location=device, weights_only=False)
     image_size = int(checkpoint.get("image_size", 224))
-    model = DocumentCNN(pretrained=False).to(device)
+    model = DocumentCNN(pretrained=False, architecture=checkpoint.get("architecture", "resnet18")).to(device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     dataset = DocumentImageDataset(

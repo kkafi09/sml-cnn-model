@@ -185,6 +185,8 @@ python scripts/build_kaggle_kernel.py --username <username>
 kaggle kernels push -p kaggle_kernel --accelerator NvidiaTeslaT4 --timeout 7200
 ```
 
+Jika eksperimen pertama telah selesai dan diperlukan kandidat lain, opsi ResNet-50 dapat disiapkan dengan `python scripts/build_kaggle_kernel.py --username <username> --architecture resnet50 --slug document-classification-resnet50-v1`. Periksa kembali kuota GPU dan batas submission sebelum menjalankan eksperimen berikutnya. Gunakan folder hasil dan catatan eksperimen yang berbeda untuk tiap run.
+
 Eksperimen `resnet18_layer3_v1` menggunakan kernel `muhammadkafanalkafi/document-classification-resnet18-improved`, versi 1. Unduh output ke direktori khusus setelah selesai dan baca `reports/validation_result.json` serta `reports/training_history.csv`. Jalankan perintah berikut dari root repository untuk memeriksa dan mengirim satu kandidat yang sudah memenuhi target:
 
 ```bash

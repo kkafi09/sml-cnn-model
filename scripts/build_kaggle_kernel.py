@@ -16,6 +16,11 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("kaggle_kernel"))
     parser.add_argument("--epochs", type=int, default=12)
     parser.add_argument("--patience", type=int, default=3)
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
+    parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer3")
+    parser.add_argument("--image-size", type=int, default=224)
+    parser.add_argument("--batch-size", type=int, default=32)
+    parser.add_argument("--learning-rate", type=float, default=1e-4)
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
     archive = io.BytesIO()
@@ -26,7 +31,7 @@ def main() -> None:
             path = root / "scripts" / filename
             bundle.write(path, path.relative_to(root))
     encoded = base64.b64encode(archive.getvalue()).decode("ascii")
-    runner = '''"""Train an improved ResNet-18 and generate a competition prediction file."""
+    runner = '''"""Train a ResNet model and generate a competition prediction file."""
 import base64
 import io
 from pathlib import Path
@@ -55,19 +60,22 @@ if not (root / "train.csv").is_file():
 work = Path("/kaggle/working")
 subprocess.run([sys.executable, str(source / "scripts/train.py"), "--data-dir", str(root),
     "--checkpoint-dir", str(work / "checkpoint"), "--report-dir", str(work / "reports"),
-    "--epochs", str(EPOCHS), "--patience", str(PATIENCE), "--batch-size", "32",
-    "--image-size", "224", "--workers", "2", "--seed", "42",
-    "--unfreeze-from", "layer3", "--learning-rate", "0.0001"], check=True)
+    "--epochs", str(EPOCHS), "--patience", str(PATIENCE), "--batch-size", str(BATCH_SIZE),
+    "--image-size", str(IMAGE_SIZE), "--workers", "2", "--seed", "42", "--architecture", ARCHITECTURE,
+    "--unfreeze-from", UNFREEZE_FROM, "--learning-rate", str(LEARNING_RATE)], check=True)
 subprocess.run([sys.executable, str(source / "scripts/predict.py"), "--data-dir", str(root),
     "--checkpoint", str(work / "checkpoint/best.pt"), "--output", str(work / "submission.csv"),
     "--batch-size", "32", "--workers", "2"], check=True)
 '''
     args.output.mkdir(parents=True, exist_ok=True)
-    prefix = f"BUNDLE = {encoded!r}\nEPOCHS = {args.epochs}\nPATIENCE = {args.patience}\n"
+    prefix = (f"BUNDLE = {encoded!r}\nEPOCHS = {args.epochs}\nPATIENCE = {args.patience}\n"
+              f"ARCHITECTURE = {args.architecture!r}\nUNFREEZE_FROM = {args.unfreeze_from!r}\n"
+              f"IMAGE_SIZE = {args.image_size}\nBATCH_SIZE = {args.batch_size}\n"
+              f"LEARNING_RATE = {args.learning_rate!r}\n")
     (args.output / "run.py").write_text(prefix + runner)
     metadata = {
         "id": f"{args.username}/{args.slug}",
-        "title": "Document classification ResNet18 improved",
+        "title": f"Document classification {args.architecture} improved",
         "code_file": "run.py",
         "language": "python",
         "kernel_type": "script",

@@ -1,4 +1,4 @@
-"""Train a reproducible ResNet-18 baseline and select by validation accuracy."""
+"""Train a reproducible ResNet model and select by validation accuracy."""
 
 import argparse
 import csv
@@ -77,6 +77,7 @@ def main() -> None:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--patience", type=int, default=0, help="Stop after this many epochs without improvement; 0 disables early stopping")
@@ -121,7 +122,7 @@ def main() -> None:
         **loader_options,
     )
 
-    model = DocumentCNN(pretrained=True).to(device)
+    model = DocumentCNN(pretrained=True, architecture=args.architecture).to(device)
     for parameter in model.backbone.parameters():
         parameter.requires_grad = False
     for parameter in model.backbone.layer4.parameters():
@@ -192,7 +193,7 @@ def main() -> None:
                     "seed": args.seed,
                     "epoch": epoch,
                     "validation_accuracy": validation_accuracy,
-                    "architecture": "resnet18",
+                    "architecture": args.architecture,
                     "unfreeze_from": args.unfreeze_from,
                     "learning_rate": args.learning_rate,
                 },
@@ -224,10 +225,11 @@ def main() -> None:
                 "validation_samples": len(validation_dataset),
                 "validation_samples_used": len(validation_dataset) - len(validation_corrupt_ids),
                 "device": str(device),
-                "model": f"ResNet-18 ImageNet initialization; {args.unfreeze_from} onward fine-tuned",
+                "model": f"{args.architecture} ImageNet initialization; {args.unfreeze_from} onward fine-tuned",
                 "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
                     "image_size": args.image_size, "learning_rate": args.learning_rate,
-                    "unfreeze_from": args.unfreeze_from, "patience": args.patience},
+                    "unfreeze_from": args.unfreeze_from, "patience": args.patience,
+                    "architecture": args.architecture},
                 "corrupt_image_count": len(corrupt_ids),
                 "corrupt_image_ids": sorted(corrupt_ids),
                 "corrupt_train_image_ids": sorted(train_corrupt_ids),
