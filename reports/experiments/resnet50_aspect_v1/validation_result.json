@@ -1,0 +1,29 @@
+{
+  "best_validation_accuracy": 0.8001874707077019,
+  "best_epoch": 4,
+  "seed": 42,
+  "train_samples": 25602,
+  "train_samples_used": 25601,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "device": "cuda",
+  "model": "resnet50 ImageNet initialization; layer3 onward fine-tuned",
+  "configuration": {
+    "epochs": 4,
+    "batch_size": 32,
+    "image_size": 224,
+    "learning_rate": 5e-05,
+    "unfreeze_from": "layer3",
+    "patience": 2,
+    "architecture": "resnet50",
+    "preserve_aspect_ratio": true
+  },
+  "corrupt_image_count": 1,
+  "corrupt_image_ids": [
+    "train_08795"
+  ],
+  "corrupt_train_image_ids": [
+    "train_08795"
+  ],
+  "corrupt_validation_image_ids": []
+}

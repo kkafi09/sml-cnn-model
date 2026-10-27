@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet50_aspect_v1",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet50-improved",
   "kernel_version": 1,
   "pushed_at_utc": "2026-10-27T10:21:14Z",
@@ -51,12 +51,18 @@
     }
   ],
   "best_validation_accuracy_observed": 0.8002,
+  "best_validation_accuracy": 0.8001874707077019,
+  "training_history": "reports/experiments/resnet50_aspect_v1/training_history.csv",
+  "validation_result": "reports/experiments/resnet50_aspect_v1/validation_result.json",
+  "test_prediction_rows": 7994,
+  "test_prediction_file_validated": true,
+  "submission_decision": "not_submitted",
+  "submission_decision_reason": "Validation accuracy 0.800187 is below the previous best 0.828621; existing best submission already scores 0.82057 public.",
   "requested_accelerator": "NvidiaTeslaT4",
   "timeout_seconds": 7200,
   "baseline_validation_accuracy": 0.7830026558350258,
   "submission_validation_threshold": 0.8,
   "target_public_score": 0.79164,
   "previous_best_validation_accuracy": 0.8286205280424933,
-  "best_validation_accuracy": null,
   "public_score": null
 }
