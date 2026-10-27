@@ -78,7 +78,7 @@ def main() -> None:
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
-    parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer4")
+    parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--label-smoothing", type=float, default=0.0)
     parser.add_argument("--preserve-aspect-ratio", action="store_true")
@@ -132,8 +132,11 @@ def main() -> None:
         parameter.requires_grad = False
     for parameter in model.backbone.layer4.parameters():
         parameter.requires_grad = True
-    if args.unfreeze_from == "layer3":
+    if args.unfreeze_from in {"layer2", "layer3"}:
         for parameter in model.backbone.layer3.parameters():
+            parameter.requires_grad = True
+    if args.unfreeze_from == "layer2":
+        for parameter in model.backbone.layer2.parameters():
             parameter.requires_grad = True
     for parameter in model.backbone.fc.parameters():
         parameter.requires_grad = True

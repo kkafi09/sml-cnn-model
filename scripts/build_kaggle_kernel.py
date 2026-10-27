@@ -17,7 +17,7 @@ def main() -> None:
     parser.add_argument("--epochs", type=int, default=12)
     parser.add_argument("--patience", type=int, default=3)
     parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
-    parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer3")
+    parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer3")
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=1e-4)
