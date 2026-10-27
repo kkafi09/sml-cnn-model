@@ -23,7 +23,7 @@ def build_image_transform(
 
     Args:
         image_size: Height and width used by the model input.
-        training: Add a small rotation augmentation for the training split.
+        training: Add mild scan-style geometric and illumination augmentation.
         preserve_aspect_ratio: Pad pages to square before resizing, avoiding page distortion.
 
     Returns:
@@ -34,7 +34,17 @@ def build_image_transform(
         operations.append(PadToSquare())
     operations.append(transforms.Resize((image_size, image_size)))
     if training:
-        operations.append(transforms.RandomRotation(degrees=2))
+        operations.extend(
+            [
+                transforms.RandomAffine(
+                    degrees=2,
+                    translate=(0.02, 0.02),
+                    scale=(0.90, 1.05),
+                    fill=(255, 255, 255),
+                ),
+                transforms.ColorJitter(brightness=0.12, contrast=0.12),
+            ]
+        )
     operations.extend(
         [
             transforms.ToTensor(),
