@@ -167,3 +167,7 @@ Run v6 menggunakan ResNet-18, padding untuk mempertahankan rasio halaman, dan au
 Run v7 fine-tuned ResNet-18 from `layer2`, with 224px aspect-preserving input, mild affine/color augmentation, learning rate `5e-5`, and no label smoothing. It reached **84,159% validation accuracy** at epoch 12, a 0,281-point improvement over v6. Kaggle submission ref `57703801` completed with public score **0,83145 (83,145%)**, improving the previous public best by 0,293 points and the baseline by 6,286 points. One corrupt training image (`train_08795`) was skipped. Full metrics are in `reports/experiments/resnet18_layer2_v1/`; its submission and hash manifest are in `submissions/`. Validation remains below the 85% stretch target, so the loop continues while observing the five-submission daily limit.
 
 Run v8 kept ResNet-18 fine-tuning from `layer2` and increased aspect-preserving input to 256px. It reached **84,550% validation accuracy** at epoch 12, improving v7 by 0,391 points. Kaggle submission ref `57705284` completed with public score **0,84107 (84,107%)**, up 0,961 points from v7 and 6,943 points from baseline 77,164%. This is the best result so far. Submission 5/5 for 2026-10-27 UTC is reached, so no further submissions are made today. Full experiment output is in `reports/experiments/resnet18_layer2_256_v1/`; its CSV and hash manifest are in `submissions/`.
+
+Tren hasil validation dan public leaderboard per submission:
+
+![Tren accuracy validation dan public leaderboard](reports/figures/submission_progress.png)
