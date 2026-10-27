@@ -5,6 +5,7 @@ Dokumen ini menjelaskan alur untuk memindahkan baseline dari mesin lokal ke Kagg
 ## Status dan batasan
 
 - Kaggle CLI sudah terpasang dan autentikasi serta akses kompetisi pernah berhasil dikonfirmasi.
+- Akun perlu memverifikasi nomor telepon untuk mengakses GPU. Periksa **Phone Verification** di pengaturan akun Kaggle sebelum menjalankan eksperimen GPU. Jika verifikasi bermasalah, gunakan [bantuan verifikasi telepon Kaggle](https://www.kaggle.com/contact#/account/activate/phone). [Penjelasan staf Kaggle](https://www.kaggle.com/discussions/product-feedback/202584)
 - Kompetisi yang dipakai: `document-image-classification-sd234504`.
 - Data kompetisi dipasang sebagai input kernel melalui `competition_sources`; jangan menyalin arsip 3,9 GB ke folder upload kernel.
 - GPU yang tersedia untuk akun/run belum dijamin. `NvidiaTeslaT4` adalah contoh accelerator ID pada CLI, bukan jaminan slot tersedia.
@@ -121,6 +122,8 @@ Untuk mengikuti log saat proses berjalan:
 ```bash
 kaggle kernels logs -f <username>/<kernel-slug>
 ```
+
+Status `RUNNING` menunjukkan status run yang dilaporkan Kaggle, tetapi belum membuktikan training sudah dimulai atau GPU sudah dialokasikan. Runner akan menampilkan `CUDA available: True` dan nama `GPU` saat kode mulai berjalan; jika CUDA tidak tersedia, runner berhenti. Jika log kosong, tunggu atau periksa kembali status dan jangan menyatakan GPU sudah terpakai sebelum ada bukti di log. Log dapat dibaca melalui CLI tanpa membuat sesi Notebook interaktif tambahan.
 
 Jangan push ulang selama run masih berjalan. Jika gagal, baca log, perbaiki penyebabnya, lalu push versi baru setelah memeriksa kuota. Hindari retry otomatis.
 
