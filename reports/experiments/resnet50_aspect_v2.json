@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet50_aspect_v2",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet50-aspect-v2",
   "kernel_version": 1,
   "pushed_at_utc": "2026-10-27T10:43:56Z",
@@ -114,6 +114,13 @@
       "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy": null,
+  "best_validation_accuracy": 0.8223715044524293,
+  "best_epoch": 12,
+  "test_prediction_rows": 7994,
+  "test_prediction_file_validated": true,
+  "training_history": "reports/experiments/resnet50_aspect_v2/training_history.csv",
+  "validation_result": "reports/experiments/resnet50_aspect_v2/validation_result.json",
+  "submission_decision": "not_submitted",
+  "submission_decision_reason": "Best validation accuracy 0.822372 is below the prior best 0.828621; no evidence this candidate would improve the existing best public score 0.82057.",
   "public_score": null
 }
