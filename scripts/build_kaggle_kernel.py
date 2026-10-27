@@ -53,9 +53,14 @@ import os
 os.environ["PYTHONPATH"] = str(source / "src") + os.pathsep + os.environ.get("PYTHONPATH", "")
 root = Path("/kaggle/input/document-image-classification-sd234504")
 if not (root / "train.csv").is_file():
-    matches = [p.parent for p in Path("/kaggle/input").glob("*/train.csv") if (p.parent / "test.csv").is_file()]
+    input_root = Path("/kaggle/input")
+    candidates = []
+    for pattern in ("*/train.csv", "*/*/train.csv", "*/*/*/train.csv"):
+        candidates.extend(input_root.glob(pattern))
+    matches = [p.parent for p in candidates if (p.parent / "test.csv").is_file()]
     if len(matches) != 1:
-        raise RuntimeError(f"Cannot uniquely locate competition CSVs: {matches}")
+        mounts = [str(path) for path in input_root.iterdir()] if input_root.is_dir() else "missing /kaggle/input"
+        raise RuntimeError(f"Cannot uniquely locate competition CSVs: {matches}; input mounts: {mounts}")
     root = matches[0]
 work = Path("/kaggle/working")
 subprocess.run([sys.executable, str(source / "scripts/train.py"), "--data-dir", str(root),

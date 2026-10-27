@@ -1,9 +1,11 @@
 {
   "experiment_id": "resnet18_layer3_v1",
-  "status": "RUNNING",
+  "status": "CANCEL_ACKNOWLEDGED",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet18-improved",
   "kernel_version": 1,
   "observed_running_at_utc": "2026-10-27T09:08:26Z",
+  "ended_at_utc": "2026-10-27T09:23:14Z",
+  "outcome_note": "Kaggle returned CANCEL_ACKNOWLEDGED; downloaded log was an empty array, so training and CUDA initialization were not confirmed.",
   "architecture": "resnet18",
   "pretrained_weights": "ImageNet",
   "unfreeze_from": "layer3",

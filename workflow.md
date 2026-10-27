@@ -190,7 +190,7 @@ kaggle kernels push -p kaggle_kernel --accelerator NvidiaTeslaT4 --timeout 7200
 
 Jika eksperimen pertama telah selesai dan diperlukan kandidat lain, opsi ResNet-50 dapat disiapkan dengan `python scripts/build_kaggle_kernel.py --username <username> --architecture resnet50 --slug document-classification-resnet50-v1`. Periksa kembali kuota GPU dan batas submission sebelum menjalankan eksperimen berikutnya. Gunakan folder hasil dan catatan eksperimen yang berbeda untuk tiap run.
 
-Eksperimen `resnet18_layer3_v1` menggunakan kernel `muhammadkafanalkafi/document-classification-resnet18-improved`, versi 1. Unduh output ke direktori khusus setelah selesai dan baca `reports/validation_result.json` serta `reports/training_history.csv`. Jalankan perintah berikut dari root repository untuk memeriksa dan mengirim satu kandidat yang sudah memenuhi target:
+Eksperimen pertama `resnet18_layer3_v1` pada versi kernel 1 berakhir dengan `CANCEL_ACKNOWLEDGED` dan log kosong. Versi kernel 2 mengonfirmasi Tesla T4 tetapi berhenti sebelum training karena CSV tidak ditemukan; runner diperbaiki untuk mencari mount kompetisi hingga tiga tingkat. Run v3 akan memakai kernel `muhammadkafanalkafi/document-classification-resnet18-improved`. Setiap percobaan disimpan di file terpisah dalam `reports/experiments/`. Setelah run sukses, unduh output ke direktori khusus dan baca `reports/validation_result.json` serta `reports/training_history.csv`. Jalankan perintah berikut dari root repository untuk memeriksa dan mengirim satu kandidat yang sudah memenuhi target:
 
 ```bash
 mkdir -p kaggle_kernel_outputs/resnet18_layer3_v1
