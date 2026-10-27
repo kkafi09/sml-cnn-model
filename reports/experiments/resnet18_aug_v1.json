@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet18_aug_v1",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet18-aug-v1",
   "kernel_version": 1,
   "pushed_at_utc": "2026-10-27T11:42:56Z",
@@ -119,8 +119,31 @@
       "validation_loss": 0.6873,
       "validation_accuracy": 0.8353,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.0579,
+      "train_accuracy": 0.9845,
+      "validation_loss": 0.7023,
+      "validation_accuracy": 0.8388,
+      "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy": null,
+  "best_validation_accuracy": 0.8387751913763475,
+  "best_epoch": 12,
+  "test_prediction_rows": 7994,
+  "test_prediction_file_validated": true,
+  "training_history": "reports/experiments/resnet18_aug_v1/training_history.csv",
+  "validation_result": "reports/experiments/resnet18_aug_v1/validation_result.json",
+  "eligible_for_submission": true,
+  "submission_ref": 57701127,
+  "submission_status": "COMPLETE",
+  "public_score": 0.82852,
+  "private_score": null,
+  "public_improvement_vs_baseline": 0.05688,
+  "public_improvement_vs_previous_best": 0.00795,
+  "submission_message": "resnet18 epoch 12 val 0.8388 d4396f5a842e",
+  "submission_artifact": "submissions/resnet18_d4396f5a842e.csv",
+  "submission_manifest": "submissions/resnet18_d4396f5a842e.json",
   "public_score": null
 }
