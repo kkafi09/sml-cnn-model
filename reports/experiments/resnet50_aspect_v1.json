@@ -16,6 +16,24 @@
   "learning_rate": 0.00005,
   "max_epochs": 4,
   "early_stopping_patience": 2,
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.395,
+      "train_accuracy": 0.5857,
+      "validation_loss": 0.9102,
+      "validation_accuracy": 0.7289,
+      "corrupt_images": 1
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.8098,
+      "train_accuracy": 0.7572,
+      "validation_loss": 0.7371,
+      "validation_accuracy": 0.7822,
+      "corrupt_images": 1
+    }
+  ],
   "requested_accelerator": "NvidiaTeslaT4",
   "timeout_seconds": 7200,
   "baseline_validation_accuracy": 0.7830026558350258,
