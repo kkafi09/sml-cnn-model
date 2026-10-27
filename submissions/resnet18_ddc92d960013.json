@@ -1,0 +1,8 @@
+{
+  "checkpoint_sha256": "47453951f0bdfb296f1987b5b8a658db6242c92029a410c2ab3951dc8e0d54a3",
+  "validation_report_sha256": "aa05b7cf72e040e5b7446d8441b527ba370cb92d63c6e639d6864cbb5e5ae58a",
+  "submission_sha256": "ddc92d960013f75f6ae063a1f1900705c423b2a7f16c97f4b2c300e251f502ed",
+  "validation_accuracy": 0.8415872519918762,
+  "model": "resnet18",
+  "epoch": 12
+}
