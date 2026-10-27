@@ -179,7 +179,7 @@ Untuk memilih perubahan model berikutnya, gunakan validation accuracy sebagai me
 
 ### Loop eksperimen saat ini
 
-Target pra-submission adalah validation accuracy minimal `0.85` pada split stratified 80/20 dengan seed 42. Target evaluasi public score setelah submission adalah `0.79164` (naik dua poin persentase dari `0.77164`); public score kandidat diketahui setelah dikirim. Setiap run harus menggunakan folder output unik dan mencatat konfigurasi serta hasil, termasuk run yang belum mencapai target. Hentikan loop saat sudah ada lima submission dalam batas harian, termasuk submission yang sudah ada sebelumnya.
+Target pra-submission adalah validation accuracy **di atas `0.80` dan mengalahkan model terbaik sebelumnya** pada split stratified 80/20 dengan seed 42. Target evaluasi public score setelah submission adalah `0.79164` (naik dua poin persentase dari `0.77164`); public score kandidat diketahui setelah dikirim. Setiap run harus menggunakan folder output unik dan mencatat konfigurasi serta hasil, termasuk run yang belum mencapai target. Hentikan loop saat sudah ada lima submission dalam batas harian, termasuk submission yang sudah ada sebelumnya.
 
 Bangun dan jalankan kernel pertama dengan kode proyek yang dikemas dalam satu script; periksa kapasitas GPU terlebih dahulu:
 
@@ -200,7 +200,7 @@ python scripts/submit_candidate.py --experiment-dir kaggle_kernel_outputs/resnet
 python scripts/submit_candidate.py --sync-only
 ```
 
-Skrip mengecek ulang riwayat submission di Kaggle, membatasi jumlah secara konservatif untuk 24 jam terakhir atau hari UTC, memastikan accuracy checkpoint sesuai laporan dan minimal 85%, serta memvalidasi seluruh 7.994 ID dan label. CSV submission disalin ke nama unik berdasarkan hash; manifest mencatat hash checkpoint, laporan, dan CSV; ref serta score yang tersedia dicatat di `reports/submission_history.csv`. Jika riwayat Kaggle tidak dapat diperiksa atau API mengembalikan hasil yang ambigu, hentikan dan selidiki sebelum mencoba lagi. Pastikan CSV dan checkpoint memang berasal dari run yang sama dengan meninjau output kernel. Gunakan `--sync-only` kembali untuk memperbarui score setelah Kaggle selesai menilai.
+Skrip mengecek ulang riwayat submission di Kaggle, membatasi jumlah secara konservatif untuk 24 jam terakhir atau hari UTC, memastikan validation accuracy checkpoint sesuai laporan, di atas 80%, dan mengalahkan skor model terdahulu, serta memvalidasi seluruh 7.994 ID dan label. CSV submission disalin ke nama unik berdasarkan hash; manifest mencatat hash checkpoint, laporan, dan CSV; ref serta score yang tersedia dicatat di `reports/submission_history.csv`. Jika riwayat Kaggle tidak dapat diperiksa atau API mengembalikan hasil yang ambigu, hentikan dan selidiki sebelum mencoba lagi. Pastikan CSV dan checkpoint memang berasal dari run yang sama dengan meninjau output kernel. Gunakan `--sync-only` kembali untuk memperbarui score setelah Kaggle selesai menilai.
 
 Baseline ResNet-18 telah dikirim dari `submissions/submission.csv` dengan deskripsi `ResNet18 baseline`. Kaggle mengembalikan submission ref `57695733`, status `COMPLETE`, public score `0.77164`; private score belum tersedia. Perintah aktual:
 

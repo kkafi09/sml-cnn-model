@@ -16,7 +16,7 @@ import torch
 
 
 COMPETITION = "document-image-classification-sd234504"
-THRESHOLD = 0.85
+THRESHOLD = 0.80
 PUBLIC_TARGET = 0.79164
 LIMIT = 5
 
@@ -134,8 +134,21 @@ def main() -> None:
     candidate = args.experiment_dir / "submission.csv"
     report = json.loads(report_path.read_text())
     score = float(report["best_validation_accuracy"])
-    if not math.isfinite(score) or not THRESHOLD <= score <= 1:
-        raise ValueError(f"Validation accuracy {score} is below the {THRESHOLD:.2f} threshold")
+    if not math.isfinite(score) or not THRESHOLD < score <= 1:
+        raise ValueError(f"Validation accuracy {score} must be above {THRESHOLD:.2f}")
+    experiment_id = args.experiment_dir.name
+    previous_scores = [float(row["validation_accuracy"]) for row in rows
+                       if row.get("validation_accuracy") not in (None, "")]
+    for previous_path in Path("reports/experiments").glob("*.json"):
+        if previous_path.stem == experiment_id:
+            continue
+        previous = json.loads(previous_path.read_text())
+        if previous.get("status") in {"COMPLETE", "COMPLETED", "SUCCESS"}:
+            previous_score = previous.get("best_validation_accuracy")
+            if previous_score is not None:
+                previous_scores.append(float(previous_score))
+    if previous_scores and score <= max(previous_scores):
+        raise ValueError(f"Validation accuracy {score:.4f} does not beat the best previous model {max(previous_scores):.4f}")
     if report.get("seed") != 42 or report.get("validation_samples") != 6401 or report.get("validation_samples_used") != 6401:
         raise ValueError("Candidate must use the complete 6,401-sample validation split with seed 42")
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)

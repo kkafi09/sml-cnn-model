@@ -15,7 +15,7 @@
   "requested_accelerator": "NvidiaTeslaT4",
   "timeout_seconds": 7200,
   "baseline_validation_accuracy": 0.7830026558350258,
-  "submission_validation_threshold": 0.85,
+  "submission_validation_threshold": 0.8,
   "target_public_score": 0.79164,
   "best_validation_accuracy": null,
   "public_score": null

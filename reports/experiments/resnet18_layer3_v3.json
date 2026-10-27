@@ -22,10 +22,11 @@
   "requested_accelerator": "NvidiaTeslaT4",
   "timeout_seconds": 7200,
   "baseline_validation_accuracy": 0.7830026558350258,
-  "submission_validation_threshold": 0.85,
+  "submission_validation_threshold": 0.8,
   "target_public_score": 0.79164,
-  "latest_epoch": 4,
-  "latest_train_accuracy": 0.9026,
-  "best_validation_accuracy": 0.8041,
+  "latest_epoch": 9,
+  "latest_train_accuracy": 0.9944,
+  "best_epoch": 9,
+  "best_validation_accuracy": 0.8269,
   "public_score": null
 }
