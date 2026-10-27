@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet18_layer2_256_v1",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet18-layer2-256-v1",
   "kernel_version": 1,
   "architecture": "resnet18",
@@ -124,9 +124,33 @@
       "validation_loss": 0.6053,
       "validation_accuracy": 0.8433,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.0907,
+      "train_accuracy": 0.9807,
+      "validation_loss": 0.6044,
+      "validation_accuracy": 0.8455,
+      "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy": null,
-  "public_score": null,
-  "pushed_at_utc": "2026-10-27T14:20:49Z"
+  "best_validation_accuracy": 0.8454928917356663,
+  "public_score": 0.84107,
+  "pushed_at_utc": "2026-10-27T14:20:49Z",
+  "kernel_status": "COMPLETE",
+  "best_epoch": 12,
+  "submission_ref": "57705284",
+  "submission_status": "COMPLETE",
+  "submission_message": "resnet18 epoch 12 val 0.8455 fa046f43b986",
+  "submission_artifact": "submissions/resnet18_fa046f43b986.csv",
+  "test_predictions": {
+    "rows": 7994,
+    "file": "submissions/resnet18_fa046f43b986.csv",
+    "label_range": [
+      0,
+      15
+    ],
+    "ids_match_test_csv": true
+  },
+  "submission_decision": "Submitted as the best available model: validation 0.845495 beats prior best 0.841587; public score 0.84107. This reached submission 5/5 for the UTC day; stop further submissions today."
 }
