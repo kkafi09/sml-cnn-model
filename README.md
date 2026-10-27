@@ -149,3 +149,9 @@ kaggle competitions submit -c document-image-classification-sd234504 \
 ```
 
 Batas kompetisi adalah lima submission per hari. Lihat [workflow.md](workflow.md) untuk langkah validasi, pengecekan status, dan pencatatan submission berikutnya.
+
+## Eksperimen lanjutan
+
+Eksperimen `resnet18_layer3_v1` sedang dijalankan di Kaggle GPU: layer3, layer4, dan classifier dilatih dengan maksimal 12 epoch dan early stopping 3 epoch. Split stratified 80/20 dan seed 42 tetap sama dengan baseline. Konfigurasi dan status dicatat di [`reports/experiments/resnet18_layer3_v1.json`](reports/experiments/resnet18_layer3_v1.json); hasil belum tersedia.
+
+Untuk loop ini, kandidat dapat dikirim jika validation accuracy minimal **85%**. Setelah Kaggle menilai submission, public score dibandingkan dengan target **79,164%**, yaitu dua poin persentase di atas skor awal 77,164%. Skrip `scripts/submit_candidate.py` memeriksa validasi, checkpoint, format/urutan CSV, dan riwayat Kaggle sebelum mengirim; skrip berhenti bila hitungan submission mencapai lima. Perhitungan kuota menggunakan 24 jam terakhir atau hari UTC sebagai batas konservatif. Petunjuk lengkap ada di [workflow.md](workflow.md).

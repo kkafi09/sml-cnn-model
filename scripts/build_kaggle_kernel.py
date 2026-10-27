@@ -1,0 +1,89 @@
+"""Build a self-contained Kaggle GPU script from the checked-in training code."""
+
+import argparse
+import base64
+import io
+import json
+from pathlib import Path
+import zipfile
+
+
+def main() -> None:
+    """Package training and inference code into a private Kaggle kernel staging folder."""
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--username", required=True)
+    parser.add_argument("--slug", default="document-classification-resnet18-improved")
+    parser.add_argument("--output", type=Path, default=Path("kaggle_kernel"))
+    parser.add_argument("--epochs", type=int, default=12)
+    parser.add_argument("--patience", type=int, default=3)
+    args = parser.parse_args()
+    root = Path(__file__).resolve().parents[1]
+    archive = io.BytesIO()
+    with zipfile.ZipFile(archive, "w", compression=zipfile.ZIP_DEFLATED) as bundle:
+        for path in sorted((root / "src" / "document_classifier").glob("*.py")):
+            bundle.write(path, path.relative_to(root))
+        for filename in ("train.py", "predict.py"):
+            path = root / "scripts" / filename
+            bundle.write(path, path.relative_to(root))
+    encoded = base64.b64encode(archive.getvalue()).decode("ascii")
+    runner = '''"""Train an improved ResNet-18 and generate a competition prediction file."""
+import base64
+import io
+from pathlib import Path
+import subprocess
+import sys
+import zipfile
+import torch
+
+print(f"PyTorch: {torch.__version__}; CUDA available: {torch.cuda.is_available()}", flush=True)
+if not torch.cuda.is_available():
+    raise RuntimeError("This experiment requires a GPU; stopping before training")
+print(f"GPU: {torch.cuda.get_device_name(0)}", flush=True)
+source = Path("/kaggle/working/sml_source")
+source.mkdir(parents=True, exist_ok=True)
+with zipfile.ZipFile(io.BytesIO(base64.b64decode(BUNDLE))) as archive:
+    archive.extractall(source)
+sys.path.insert(0, str(source / "src"))
+import os
+os.environ["PYTHONPATH"] = str(source / "src") + os.pathsep + os.environ.get("PYTHONPATH", "")
+root = Path("/kaggle/input/document-image-classification-sd234504")
+if not (root / "train.csv").is_file():
+    matches = [p.parent for p in Path("/kaggle/input").glob("*/train.csv") if (p.parent / "test.csv").is_file()]
+    if len(matches) != 1:
+        raise RuntimeError(f"Cannot uniquely locate competition CSVs: {matches}")
+    root = matches[0]
+work = Path("/kaggle/working")
+subprocess.run([sys.executable, str(source / "scripts/train.py"), "--data-dir", str(root),
+    "--checkpoint-dir", str(work / "checkpoint"), "--report-dir", str(work / "reports"),
+    "--epochs", str(EPOCHS), "--patience", str(PATIENCE), "--batch-size", "32",
+    "--image-size", "224", "--workers", "2", "--seed", "42",
+    "--unfreeze-from", "layer3", "--learning-rate", "0.0001"], check=True)
+subprocess.run([sys.executable, str(source / "scripts/predict.py"), "--data-dir", str(root),
+    "--checkpoint", str(work / "checkpoint/best.pt"), "--output", str(work / "submission.csv"),
+    "--batch-size", "32", "--workers", "2"], check=True)
+'''
+    args.output.mkdir(parents=True, exist_ok=True)
+    prefix = f"BUNDLE = {encoded!r}\nEPOCHS = {args.epochs}\nPATIENCE = {args.patience}\n"
+    (args.output / "run.py").write_text(prefix + runner)
+    metadata = {
+        "id": f"{args.username}/{args.slug}",
+        "title": "Document classification ResNet18 improved",
+        "code_file": "run.py",
+        "language": "python",
+        "kernel_type": "script",
+        "is_private": "true",
+        "enable_gpu": "true",
+        "enable_tpu": "false",
+        "enable_internet": "true",
+        "machine_shape": "NvidiaTeslaT4",
+        "dataset_sources": [],
+        "competition_sources": ["document-image-classification-sd234504"],
+        "kernel_sources": [],
+        "model_sources": [],
+    }
+    (args.output / "kernel-metadata.json").write_text(json.dumps(metadata, indent=2) + "\n")
+    print(f"Prepared kernel {metadata['id']} in {args.output}")
+
+
+if __name__ == "__main__":
+    main()

@@ -77,7 +77,12 @@ def main() -> None:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer4")
+    parser.add_argument("--learning-rate", type=float, default=1e-4)
+    parser.add_argument("--patience", type=int, default=0, help="Stop after this many epochs without improvement; 0 disables early stopping")
     args = parser.parse_args()
+    if args.epochs < 1 or args.patience < 0 or args.learning_rate <= 0:
+        parser.error("epochs and learning rate must be positive; patience must be nonnegative")
 
     torch.set_num_threads(min(4, torch.get_num_threads()))
     torch.manual_seed(args.seed)
@@ -121,11 +126,14 @@ def main() -> None:
         parameter.requires_grad = False
     for parameter in model.backbone.layer4.parameters():
         parameter.requires_grad = True
+    if args.unfreeze_from == "layer3":
+        for parameter in model.backbone.layer3.parameters():
+            parameter.requires_grad = True
     for parameter in model.backbone.fc.parameters():
         parameter.requires_grad = True
     optimizer = torch.optim.AdamW(
         (parameter for parameter in model.parameters() if parameter.requires_grad),
-        lr=1e-4,
+        lr=args.learning_rate,
         weight_decay=1e-4,
     )
     criterion = nn.CrossEntropyLoss()
@@ -139,6 +147,7 @@ def main() -> None:
     corrupt_ids = set()
     train_corrupt_ids = set()
     validation_corrupt_ids = set()
+    epochs_without_improvement = 0
     print(
         f"Device: {device}; train: {len(train_dataset)}; "
         f"validation: {len(validation_dataset)}; classes: 16",
@@ -174,6 +183,7 @@ def main() -> None:
         )
         if validation_accuracy > best_accuracy:
             best_accuracy = validation_accuracy
+            epochs_without_improvement = 0
             torch.save(
                 {
                     "model_state_dict": model.state_dict(),
@@ -183,9 +193,21 @@ def main() -> None:
                     "epoch": epoch,
                     "validation_accuracy": validation_accuracy,
                     "architecture": "resnet18",
+                    "unfreeze_from": args.unfreeze_from,
+                    "learning_rate": args.learning_rate,
                 },
                 args.checkpoint_dir / "best.pt",
             )
+        else:
+            epochs_without_improvement += 1
+
+        with (args.report_dir / "training_history.csv").open("w", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=history[0].keys())
+            writer.writeheader()
+            writer.writerows(history)
+        if args.patience and epochs_without_improvement >= args.patience:
+            print(f"Early stopping after {epoch} epochs", flush=True)
+            break
 
     with (args.report_dir / "training_history.csv").open("w", newline="") as file:
         writer = csv.DictWriter(file, fieldnames=history[0].keys())
@@ -202,7 +224,10 @@ def main() -> None:
                 "validation_samples": len(validation_dataset),
                 "validation_samples_used": len(validation_dataset) - len(validation_corrupt_ids),
                 "device": str(device),
-                "model": "ResNet-18 ImageNet initialization; layer4 and classifier fine-tuned",
+                "model": f"ResNet-18 ImageNet initialization; {args.unfreeze_from} onward fine-tuned",
+                "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
+                    "image_size": args.image_size, "learning_rate": args.learning_rate,
+                    "unfreeze_from": args.unfreeze_from, "patience": args.patience},
                 "corrupt_image_count": len(corrupt_ids),
                 "corrupt_image_ids": sorted(corrupt_ids),
                 "corrupt_train_image_ids": sorted(train_corrupt_ids),
