@@ -33,7 +33,9 @@ def main() -> None:
     dataset = DocumentImageDataset(
         test_frame,
         args.data_dir,
-        transform=build_image_transform(image_size),
+        transform=build_image_transform(
+            image_size, preserve_aspect_ratio=bool(checkpoint.get("preserve_aspect_ratio", False))
+        ),
         include_labels=False,
     )
     loader = DataLoader(

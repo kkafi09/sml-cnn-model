@@ -145,6 +145,11 @@ def main() -> None:
         raise ValueError("Checkpoint and validation report epoch differ")
     if checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16:
         raise ValueError("Checkpoint seed or number of classes does not match the experiment")
+    configuration = report.get("configuration", {})
+    if (checkpoint.get("architecture") != configuration.get("architecture") or
+            bool(checkpoint.get("preserve_aspect_ratio", False)) !=
+            bool(configuration.get("preserve_aspect_ratio", False))):
+        raise ValueError("Checkpoint architecture or image transform does not match the validation report")
     validate_prediction(candidate, args.data_dir / "test.csv")
     digest = hashlib.sha256(candidate.read_bytes()).hexdigest()[:12]
     model = str(checkpoint["architecture"])
@@ -168,7 +173,7 @@ def main() -> None:
     match = re.search(r"Submission ref:\s*(\d+)", result.stdout)
     if not match:
         raise RuntimeError("Submit returned without a ref; inspect Kaggle before retrying")
-    config = report.get("configuration", {})
+    config = configuration
     record = {"submission_ref": match.group(1), "submitted_at_utc": datetime.now(timezone.utc).isoformat(),
               "competition": COMPETITION, "model": model, "pretrained_weights": "ImageNet",
               "training_setup": json.dumps(config, sort_keys=True), "validation_accuracy": score,

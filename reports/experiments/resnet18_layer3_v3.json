@@ -24,6 +24,8 @@
   "baseline_validation_accuracy": 0.7830026558350258,
   "submission_validation_threshold": 0.85,
   "target_public_score": 0.79164,
-  "best_validation_accuracy": null,
+  "latest_epoch": 4,
+  "latest_train_accuracy": 0.9026,
+  "best_validation_accuracy": 0.8041,
   "public_score": null
 }

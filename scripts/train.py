@@ -80,6 +80,7 @@ def main() -> None:
     parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
+    parser.add_argument("--preserve-aspect-ratio", action="store_true")
     parser.add_argument("--patience", type=int, default=0, help="Stop after this many epochs without improvement; 0 disables early stopping")
     args = parser.parse_args()
     if args.epochs < 1 or args.patience < 0 or args.learning_rate <= 0:
@@ -100,12 +101,14 @@ def main() -> None:
     train_dataset = DocumentImageDataset(
         train_rows,
         args.data_dir,
-        transform=build_image_transform(args.image_size, training=True),
+        transform=build_image_transform(args.image_size, training=True,
+                                        preserve_aspect_ratio=args.preserve_aspect_ratio),
     )
     validation_dataset = DocumentImageDataset(
         validation_rows,
         args.data_dir,
-        transform=build_image_transform(args.image_size),
+        transform=build_image_transform(args.image_size,
+                                        preserve_aspect_ratio=args.preserve_aspect_ratio),
     )
     loader_options = {
         "batch_size": args.batch_size,
@@ -196,6 +199,7 @@ def main() -> None:
                     "architecture": args.architecture,
                     "unfreeze_from": args.unfreeze_from,
                     "learning_rate": args.learning_rate,
+                    "preserve_aspect_ratio": args.preserve_aspect_ratio,
                 },
                 args.checkpoint_dir / "best.pt",
             )
@@ -229,7 +233,8 @@ def main() -> None:
                 "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
                     "image_size": args.image_size, "learning_rate": args.learning_rate,
                     "unfreeze_from": args.unfreeze_from, "patience": args.patience,
-                    "architecture": args.architecture},
+                    "architecture": args.architecture,
+                    "preserve_aspect_ratio": args.preserve_aspect_ratio},
                 "corrupt_image_count": len(corrupt_ids),
                 "corrupt_image_ids": sorted(corrupt_ids),
                 "corrupt_train_image_ids": sorted(train_corrupt_ids),
