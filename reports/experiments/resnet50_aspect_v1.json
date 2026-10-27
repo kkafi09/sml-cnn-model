@@ -40,8 +40,17 @@
       "validation_loss": 0.6933,
       "validation_accuracy": 0.7943,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.4551,
+      "train_accuracy": 0.862,
+      "validation_loss": 0.6986,
+      "validation_accuracy": 0.8002,
+      "corrupt_images": 1
     }
   ],
+  "best_validation_accuracy_observed": 0.8002,
   "requested_accelerator": "NvidiaTeslaT4",
   "timeout_seconds": 7200,
   "baseline_validation_accuracy": 0.7830026558350258,
