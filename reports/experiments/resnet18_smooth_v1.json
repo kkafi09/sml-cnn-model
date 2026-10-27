@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet18_smooth_v1",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet18-smooth-v1",
   "kernel_version": 1,
   "pushed_at_utc": "2026-10-27T12:36:17Z",
@@ -10,8 +10,14 @@
   "preserve_aspect_ratio": true,
   "training_augmentations": {
     "random_affine_degrees": 2,
-    "random_affine_translate": [0.02, 0.02],
-    "random_affine_scale": [0.9, 1.05],
+    "random_affine_translate": [
+      0.02,
+      0.02
+    ],
+    "random_affine_scale": [
+      0.9,
+      1.05
+    ],
     "color_jitter_brightness": 0.12,
     "color_jitter_contrast": 0.12
   },
@@ -120,8 +126,26 @@
       "validation_loss": 0.8918,
       "validation_accuracy": 0.8367,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.4174,
+      "train_accuracy": 0.9858,
+      "validation_loss": 0.9057,
+      "validation_accuracy": 0.835,
+      "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy": null,
-  "public_score": null
+  "best_validation_accuracy": 0.8367442587095766,
+  "public_score": null,
+  "best_epoch": 11,
+  "test_predictions": {
+    "rows": 7994,
+    "file": "kaggle_kernel_outputs/resnet18_smooth_v1/submission.csv",
+    "label_range": [
+      0,
+      15
+    ]
+  },
+  "submission_decision": "Not submitted: validation accuracy 0.836744 is below the existing best 0.838775; keep the stronger model as current best."
 }
