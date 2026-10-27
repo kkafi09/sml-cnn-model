@@ -32,6 +32,14 @@
       "validation_loss": 0.7371,
       "validation_accuracy": 0.7822,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5994,
+      "train_accuracy": 0.8196,
+      "validation_loss": 0.6933,
+      "validation_accuracy": 0.7943,
+      "corrupt_images": 1
     }
   ],
   "requested_accelerator": "NvidiaTeslaT4",
