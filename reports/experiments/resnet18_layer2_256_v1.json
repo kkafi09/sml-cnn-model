@@ -84,6 +84,14 @@
       "validation_loss": 0.614,
       "validation_accuracy": 0.8236,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.2238,
+      "train_accuracy": 0.9353,
+      "validation_loss": 0.5945,
+      "validation_accuracy": 0.8375,
+      "corrupt_images": 1
     }
   ],
   "best_validation_accuracy": null,
