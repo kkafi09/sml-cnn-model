@@ -21,6 +21,7 @@ def main() -> None:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--batch-size", type=int, default=32)
     parser.add_argument("--learning-rate", type=float, default=1e-4)
+    parser.add_argument("--label-smoothing", type=float, default=0.0)
     parser.add_argument("--preserve-aspect-ratio", action="store_true")
     args = parser.parse_args()
     root = Path(__file__).resolve().parents[1]
@@ -68,7 +69,8 @@ subprocess.run([sys.executable, str(source / "scripts/train.py"), "--data-dir", 
     "--checkpoint-dir", str(work / "checkpoint"), "--report-dir", str(work / "reports"),
     "--epochs", str(EPOCHS), "--patience", str(PATIENCE), "--batch-size", str(BATCH_SIZE),
     "--image-size", str(IMAGE_SIZE), "--workers", "2", "--seed", "42", "--architecture", ARCHITECTURE,
-    "--unfreeze-from", UNFREEZE_FROM, "--learning-rate", str(LEARNING_RATE)] +
+    "--unfreeze-from", UNFREEZE_FROM, "--learning-rate", str(LEARNING_RATE),
+    "--label-smoothing", str(LABEL_SMOOTHING)] +
     (["--preserve-aspect-ratio"] if PRESERVE_ASPECT_RATIO else []), check=True)
 subprocess.run([sys.executable, str(source / "scripts/predict.py"), "--data-dir", str(root),
     "--checkpoint", str(work / "checkpoint/best.pt"), "--output", str(work / "submission.csv"),
@@ -79,6 +81,7 @@ subprocess.run([sys.executable, str(source / "scripts/predict.py"), "--data-dir"
               f"ARCHITECTURE = {args.architecture!r}\nUNFREEZE_FROM = {args.unfreeze_from!r}\n"
               f"IMAGE_SIZE = {args.image_size}\nBATCH_SIZE = {args.batch_size}\n"
               f"LEARNING_RATE = {args.learning_rate!r}\n"
+              f"LABEL_SMOOTHING = {args.label_smoothing!r}\n"
               f"PRESERVE_ASPECT_RATIO = {args.preserve_aspect_ratio!r}\n")
     (args.output / "run.py").write_text(prefix + runner)
     metadata = {

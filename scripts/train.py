@@ -80,11 +80,13 @@ def main() -> None:
     parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
+    parser.add_argument("--label-smoothing", type=float, default=0.0)
     parser.add_argument("--preserve-aspect-ratio", action="store_true")
     parser.add_argument("--patience", type=int, default=0, help="Stop after this many epochs without improvement; 0 disables early stopping")
     args = parser.parse_args()
-    if args.epochs < 1 or args.patience < 0 or args.learning_rate <= 0:
-        parser.error("epochs and learning rate must be positive; patience must be nonnegative")
+    if (args.epochs < 1 or args.patience < 0 or args.learning_rate <= 0 or
+            not 0 <= args.label_smoothing < 1):
+        parser.error("epochs and learning rate must be positive; patience nonnegative; label smoothing in [0, 1)")
 
     torch.set_num_threads(min(4, torch.get_num_threads()))
     torch.manual_seed(args.seed)
@@ -140,7 +142,7 @@ def main() -> None:
         lr=args.learning_rate,
         weight_decay=1e-4,
     )
-    criterion = nn.CrossEntropyLoss()
+    criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="max", factor=0.5, patience=0
     )
@@ -199,6 +201,7 @@ def main() -> None:
                     "architecture": args.architecture,
                     "unfreeze_from": args.unfreeze_from,
                     "learning_rate": args.learning_rate,
+                    "label_smoothing": args.label_smoothing,
                     "preserve_aspect_ratio": args.preserve_aspect_ratio,
                 },
                 args.checkpoint_dir / "best.pt",
@@ -232,6 +235,7 @@ def main() -> None:
                 "model": f"{args.architecture} ImageNet initialization; {args.unfreeze_from} onward fine-tuned",
                 "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
                     "image_size": args.image_size, "learning_rate": args.learning_rate,
+                    "label_smoothing": args.label_smoothing,
                     "unfreeze_from": args.unfreeze_from, "patience": args.patience,
                     "architecture": args.architecture,
                     "preserve_aspect_ratio": args.preserve_aspect_ratio},
