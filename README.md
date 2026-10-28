@@ -183,3 +183,5 @@ Ensemble tiga checkpoint ResNet-18 berukuran 224px, 256px, dan 320px dengan bobo
 Penambahan checkpoint ResNet-18 label smoothing (bobot 1/7; tiga model lain masing-masing 2/7) menghasilkan **86,268% validation accuracy**. Submission `57724330` mendapat public score **0,85487 (85,487%)**, naik 0,209 poin persentase dari ensemble tiga model. Detail lengkap dan hash tersimpan di `reports/experiments/ensemble_224_256_320_smooth_v1.json` serta `reports/submission_history.csv`.
 
 ResNet-18 384px mencapai **84,721% validation accuracy** pada epoch 12. Model tunggal tidak disubmit karena di bawah ensemble terbaik; checkpoint dan 7.994 prediksi telah divalidasi. Metrik lengkap ada di `reports/experiments/resnet18_layer2_384_v1/`.
+
+Analisis per kelas untuk ensemble empat checkpoint menunjukkan validation `scientific_report` **66,50%** (46 dari 400 sampel diprediksi sebagai `presentation`) dan `form` **71,82%** (24 dari 401 diprediksi sebagai `invoice`). Ini membantu memilih eksperimen berikutnya; angka berasal dari split validation, bukan label test. Rincian semua kelas ada di `reports/experiments/ensemble_224_256_320_smooth_v1/per_class.csv`.

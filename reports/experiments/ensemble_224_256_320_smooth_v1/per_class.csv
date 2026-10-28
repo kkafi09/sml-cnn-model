@@ -1,0 +1,17 @@
+label,class_name,samples,correct,accuracy,most_confused_with,confusion_count
+0,advertisement,402,366,0.9104477611940298,presentation,10
+1,budget,401,328,0.8179551122194514,scientific_report,14
+2,email,403,399,0.9900744416873449,form,2
+3,file_folder,405,390,0.9629629629629629,presentation,4
+4,form,401,288,0.7182044887780549,invoice,24
+5,handwritten,405,384,0.9481481481481482,form,6
+6,invoice,396,341,0.8611111111111112,budget,17
+7,letter,394,341,0.8654822335025381,form,7
+8,memo,399,361,0.9047619047619048,letter,10
+9,news_article,394,329,0.8350253807106599,presentation,21
+10,presentation,398,329,0.8266331658291457,scientific_report,23
+11,questionnaire,390,320,0.8205128205128205,presentation,12
+12,resume,406,367,0.9039408866995073,presentation,18
+13,scientific_publication,411,370,0.9002433090024331,news_article,14
+14,scientific_report,400,266,0.665,presentation,46
+15,specification,396,343,0.8661616161616161,form,10
