@@ -1,0 +1,58 @@
+{
+  "experiment_id": "ensemble_224_256_320_weight_comparison",
+  "status": "ANALYSIS",
+  "description": "Compare five fixed probability weights using the same 6,401-sample validation split; no test labels used. Repeated selection on this split can overfit.",
+  "seed": 42,
+  "image_sizes": [
+    224,
+    256,
+    320
+  ],
+  "results": [
+    {
+      "weights": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "validation_accuracy": 0.86033432
+    },
+    {
+      "weights": [
+        0.25,
+        0.25,
+        0.5
+      ],
+      "validation_accuracy": 0.8601781
+    },
+    {
+      "weights": [
+        0.25,
+        0.5,
+        0.25
+      ],
+      "validation_accuracy": 0.85752226
+    },
+    {
+      "weights": [
+        0.5,
+        0.25,
+        0.25
+      ],
+      "validation_accuracy": 0.86002187
+    },
+    {
+      "weights": [
+        0.2,
+        0.4,
+        0.4
+      ],
+      "validation_accuracy": 0.85892829
+    }
+  ],
+  "selected_weights": [
+    0.3333333333333333,
+    0.3333333333333333,
+    0.3333333333333333
+  ]
+}
