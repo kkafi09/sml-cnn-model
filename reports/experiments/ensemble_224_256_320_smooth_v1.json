@@ -1,22 +1,53 @@
 {
-  "experiment_id": "ensemble_224_256_320_smooth_v1",
-  "status": "RUNNING",
   "model": "weighted probability ensemble",
   "seed": 42,
-  "members": [
-    "resnet18_layer2_v1",
-    "resnet18_layer2_256_v1",
-    "resnet18_layer2_320_v1",
-    "resnet18_smooth_v1"
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "best_validation_accuracy": 0.8626777066083424,
+  "checkpoints": [
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_v1/checkpoint/best.pt",
+      "sha256": "47453951f0bdfb296f1987b5b8a658db6242c92029a410c2ab3951dc8e0d54a3",
+      "weight": 0.2857142857142857,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8415872519918762
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_256_v1/checkpoint/best.pt",
+      "sha256": "e26080f9c92875bc2c8a71b0f1ca2e65df714e1ddac5396282a164fa7c82dd2b",
+      "weight": 0.2857142857142857,
+      "epoch": 12,
+      "image_size": 256,
+      "validation_accuracy": 0.8454928917356663
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_320_v1/checkpoint/best.pt",
+      "sha256": "4b3780614ade03d593ba226781634cf4266a7683dd9d8370a394e00b6b051b75",
+      "weight": 0.2857142857142857,
+      "epoch": 11,
+      "image_size": 320,
+      "validation_accuracy": 0.8484611779409468
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_smooth_v1/checkpoint/best.pt",
+      "sha256": "aa36aca0dde1551dcf1d58e19c66a610ffa11d3dbd23072822fc37f4ccb933b1",
+      "weight": 0.14285714285714285,
+      "epoch": 11,
+      "image_size": 224,
+      "validation_accuracy": 0.8367442587095766
+    }
   ],
-  "unnormalized_weights": [
-    1,
-    1,
-    1,
-    0.5
-  ],
+  "minimum_validation": 0.8603343227620684,
+  "test_predicted": true,
+  "device": "cpu",
+  "submission_sha256": "da4820928ff953d6a04a62c93a8228619646f31080700ff3eac1015a35baebe7",
+  "experiment_id": "ensemble_224_256_320_smooth_v1",
+  "status": "COMPLETE",
+  "submission_status": "COMPLETE",
+  "submission_ref": "57724330",
+  "public_score": 0.85487,
   "previous_best_validation_accuracy": 0.8603343227620684,
   "previous_best_public_score": 0.85278,
-  "device": "cpu",
-  "public_score": null
+  "submission_artifact": "submissions/ensemble_resnet18_da4820928ff9.csv"
 }
