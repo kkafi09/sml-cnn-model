@@ -73,6 +73,30 @@
       "validation_loss": 0.5618,
       "validation_accuracy": 0.8382,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.3421,
+      "train_accuracy": 0.9004,
+      "validation_loss": 0.5677,
+      "validation_accuracy": 0.8385,
+      "corrupt_images": 1
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.3001,
+      "train_accuracy": 0.9147,
+      "validation_loss": 0.5729,
+      "validation_accuracy": 0.8391,
+      "corrupt_images": 1
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.2613,
+      "train_accuracy": 0.927,
+      "validation_loss": 0.5879,
+      "validation_accuracy": 0.8406,
+      "corrupt_images": 1
     }
   ],
   "best_validation_accuracy": null,
