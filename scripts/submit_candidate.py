@@ -106,6 +106,8 @@ def main() -> None:
     parser.add_argument("--data-dir", type=Path, default=Path("data"))
     parser.add_argument("--history", type=Path, default=Path("reports/submission_history.csv"))
     parser.add_argument("--sync-only", action="store_true", help="Update scores without submitting")
+    parser.add_argument("--ensemble", action="store_true", help="Validate an ensemble evaluation directory")
+    parser.add_argument("--dry-run", action="store_true", help="Validate the candidate without submitting")
     args = parser.parse_args()
     rows = kaggle_submissions()
     sync_history(rows, args.history)
@@ -118,7 +120,7 @@ def main() -> None:
         return
     if args.experiment_dir is None:
         parser.error("--experiment-dir is required unless --sync-only is specified")
-    if used >= LIMIT:
+    if used >= LIMIT and not args.dry_run:
         raise RuntimeError("Daily submission limit reached; stopping")
     if not args.history.exists():
         raise FileNotFoundError("Submission history CSV is missing")
@@ -129,7 +131,7 @@ def main() -> None:
                 "message", "artifact"}
     if fields is None or set(fields) != required:
         raise ValueError("Submission history CSV has an unexpected schema")
-    report_path = args.experiment_dir / "reports/validation_result.json"
+    report_path = args.experiment_dir / ("validation_result.json" if args.ensemble else "reports/validation_result.json")
     checkpoint_path = args.experiment_dir / "checkpoint/best.pt"
     candidate = args.experiment_dir / "submission.csv"
     report = json.loads(report_path.read_text())
@@ -151,33 +153,65 @@ def main() -> None:
         raise ValueError(f"Validation accuracy {score:.4f} does not beat the best previous model {max(previous_scores):.4f}")
     if report.get("seed") != 42 or report.get("validation_samples") != 6401 or report.get("validation_samples_used") != 6401:
         raise ValueError("Candidate must use the complete 6,401-sample validation split with seed 42")
-    checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
-    if not math.isclose(float(checkpoint["validation_accuracy"]), score, abs_tol=1e-10):
-        raise ValueError("Checkpoint and validation report accuracy differ")
-    if int(checkpoint["epoch"]) != int(report["best_epoch"]):
-        raise ValueError("Checkpoint and validation report epoch differ")
-    if checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16:
-        raise ValueError("Checkpoint seed or number of classes does not match the experiment")
     configuration = report.get("configuration", {})
-    if (checkpoint.get("architecture") != configuration.get("architecture") or
-            bool(checkpoint.get("preserve_aspect_ratio", False)) !=
-            bool(configuration.get("preserve_aspect_ratio", False))):
-        raise ValueError("Checkpoint architecture or image transform does not match the validation report")
+    if args.ensemble:
+        members = report.get("checkpoints", [])
+        if report.get("model") != "weighted probability ensemble" or not report.get("test_predicted") or len(members) < 2:
+            raise ValueError("Ensemble report or test predictions are incomplete")
+        weights = [float(member["weight"]) for member in members]
+        if any(not math.isfinite(w) or w < 0 for w in weights) or not math.isclose(sum(weights), 1.0, abs_tol=1e-8):
+            raise ValueError("Invalid ensemble weights")
+        for member in members:
+            path = Path(member["path"])
+            if hashlib.sha256(path.read_bytes()).hexdigest() != member["sha256"]:
+                raise ValueError(f"Checkpoint hash does not match ensemble report: {path}")
+            checkpoint = torch.load(path, map_location="cpu", weights_only=True)
+            if (checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16
+                    or checkpoint.get("architecture") != "resnet18"
+                    or int(checkpoint["epoch"]) != int(member["epoch"])
+                    or int(checkpoint["image_size"]) != int(member["image_size"])
+                    or abs(float(checkpoint["validation_accuracy"]) - float(member["validation_accuracy"])) > 2 / 6401):
+                raise ValueError(f"Checkpoint metadata does not match ensemble report: {path}")
+        model = "ensemble_resnet18"
+        configuration = {"method": "weighted probability mean", "members": members}
+        manifest_checkpoints = {"checkpoints": members}
+        description = "ensemble_resnet18 " + "+".join(
+            f"{member['image_size']}x{member['weight']:g}" for member in members)
+    else:
+        checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
+        if not math.isclose(float(checkpoint["validation_accuracy"]), score, abs_tol=1e-10):
+            raise ValueError("Checkpoint and validation report accuracy differ")
+        if int(checkpoint["epoch"]) != int(report["best_epoch"]):
+            raise ValueError("Checkpoint and validation report epoch differ")
+        if checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16:
+            raise ValueError("Checkpoint seed or number of classes does not match the experiment")
+        if (checkpoint.get("architecture") != configuration.get("architecture") or
+                bool(checkpoint.get("preserve_aspect_ratio", False)) !=
+                bool(configuration.get("preserve_aspect_ratio", False))):
+            raise ValueError("Checkpoint architecture or image transform does not match the validation report")
+        model = str(checkpoint["architecture"])
+        description = f"{model} epoch {checkpoint['epoch']}"
+        manifest_checkpoints = {"checkpoint_sha256": hashlib.sha256(checkpoint_path.read_bytes()).hexdigest(),
+                                "epoch": checkpoint["epoch"]}
     validate_prediction(candidate, args.data_dir / "test.csv")
-    digest = hashlib.sha256(candidate.read_bytes()).hexdigest()[:12]
-    model = str(checkpoint["architecture"])
-    message = f"{model} epoch {checkpoint['epoch']} val {score:.4f} {digest}"
+    candidate_hash = hashlib.sha256(candidate.read_bytes()).hexdigest()
+    if args.ensemble and report.get("submission_sha256") != candidate_hash:
+        raise ValueError("Submission hash does not match ensemble report")
+    digest = candidate_hash[:12]
+    message = f"{description} val {score:.4f} {digest}"
     if any(row.get("description") == message for row in rows):
         raise RuntimeError("This candidate already appears in Kaggle submission history")
+    if args.dry_run:
+        print(f"Candidate validated: {message}; conservative quota {used}/{LIMIT}", flush=True)
+        return
     archive = Path("submissions") / f"{model}_{digest}.csv"
     archive.parent.mkdir(parents=True, exist_ok=True)
     if archive.exists() and archive.read_bytes() != candidate.read_bytes():
         raise RuntimeError("Candidate archive collision")
     shutil.copyfile(candidate, archive)
-    manifest = {"checkpoint_sha256": hashlib.sha256(checkpoint_path.read_bytes()).hexdigest(),
-                "validation_report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
+    manifest = {**manifest_checkpoints, "validation_report_sha256": hashlib.sha256(report_path.read_bytes()).hexdigest(),
                 "submission_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
-                "validation_accuracy": score, "model": model, "epoch": checkpoint["epoch"]}
+                "validation_accuracy": score, "model": model}
     archive.with_suffix(".json").write_text(json.dumps(manifest, indent=2) + "\n")
     command = ["kaggle", "competitions", "submit", "-c", COMPETITION,
                "-f", str(archive), "-m", message]

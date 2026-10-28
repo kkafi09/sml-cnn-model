@@ -41,6 +41,30 @@
       "validation_loss": 0.8033,
       "validation_accuracy": 0.7621,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7501,
+      "train_accuracy": 0.78,
+      "validation_loss": 0.6813,
+      "validation_accuracy": 0.803,
+      "corrupt_images": 1
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.6044,
+      "train_accuracy": 0.8204,
+      "validation_loss": 0.6262,
+      "validation_accuracy": 0.8232,
+      "corrupt_images": 1
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5007,
+      "train_accuracy": 0.8511,
+      "validation_loss": 0.6272,
+      "validation_accuracy": 0.8188,
+      "corrupt_images": 1
     }
   ],
   "best_validation_accuracy": null,

@@ -229,3 +229,24 @@ kaggle competitions submit -c document-image-classification-sd234504 \
 - [Kaggle CLI: kernel metadata format](https://github.com/Kaggle/kaggle-cli/blob/main/docs/kernels_metadata.md)
 - [Kaggle: efficient GPU usage and quota monitoring](https://www.kaggle.com/docs/efficient-gpu-usage)
 - [Kaggle Notebooks documentation](https://www.kaggle.com/docs/notebooks)
+
+### Kandidat ensemble probabilitas
+
+Gunakan checkpoint yang sudah dievaluasi pada split seed 42 yang sama. Contoh evaluasi tetap 30% model 224px dan 70% model 256px:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/evaluate_ensemble.py \
+  --checkpoint kaggle_kernel_outputs/resnet18_layer2_v1/checkpoint/best.pt --weight 0.3 \
+  --checkpoint kaggle_kernel_outputs/resnet18_layer2_256_v1/checkpoint/best.pt --weight 0.7 \
+  --minimum-validation 0.8454928917356663 \
+  --output-dir kaggle_kernel_outputs/ensemble_224_256_v1
+```
+
+Skrip membandingkan validation dan membuat prediksi test hanya jika ensemble melewati ambang yang ditentukan. Sebelum submit, pemeriksaan berikut memvalidasi hash kedua checkpoint, hash CSV, urutan ID, skor, dan kuota. `--dry-run` tidak mengirim submission; hapus opsi itu hanya jika kandidat layak dikirim dan kuota tersedia.
+
+```bash
+.venv/bin/python scripts/submit_candidate.py --ensemble --dry-run \
+  --experiment-dir kaggle_kernel_outputs/ensemble_224_256_v1
+```
+
+Pelindung menghitung submission dalam 24 jam terakhir atau hari UTC saat ini, mana pun yang lebih konservatif. Periksa ulang status kuota tepat sebelum mengirim; jangan mengirim berulang untuk mengisi slot.

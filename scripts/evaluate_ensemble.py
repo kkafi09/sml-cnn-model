@@ -105,9 +105,11 @@ def main():
                 path, test, args.data_dir, device, args.batch_size, args.workers)
             test_probabilities.append(probabilities)
         combined_test = sum(weight * probs for weight, probs in zip(weights, test_probabilities))
+        submission_path = args.output_dir / "submission.csv"
         write_submission(test["id"].astype(str).tolist(), combined_test.argmax(axis=1).tolist(),
-                         args.output_dir / "submission.csv")
+                         submission_path)
         report["test_predicted"] = True
+        report["submission_sha256"] = hashlib.sha256(submission_path.read_bytes()).hexdigest()
     (args.output_dir / "validation_result.json").write_text(json.dumps(report, indent=2) + "\n")
 
 

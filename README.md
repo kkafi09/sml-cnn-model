@@ -171,3 +171,5 @@ Run v8 kept ResNet-18 fine-tuning from `layer2` and increased aspect-preserving 
 Tren hasil validation dan public leaderboard per submission:
 
 ![Tren accuracy validation dan public leaderboard](reports/figures/submission_progress.png)
+
+Pada 28 Oktober, ensemble probabilitas dua checkpoint ResNet-18 berukuran 224px dan 256px (bobot 0,3 dan 0,7) mencapai **84,955% validation accuracy** pada split yang sama. Prediksi 7.994 ID dan hash checkpoint telah diperiksa; kandidat menunggu kuota dan belum memiliki public score. Konfigurasi dan metrik ada di `reports/experiments/ensemble_224_256_v1.json`. Evaluasi dapat diulang dengan `scripts/evaluate_ensemble.py`; checkpoint berasal dari output kernel masing-masing dan tetap diabaikan Git.

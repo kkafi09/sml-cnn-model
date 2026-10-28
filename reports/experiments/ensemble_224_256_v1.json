@@ -1,0 +1,36 @@
+{
+  "model": "weighted probability ensemble",
+  "seed": 42,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "best_validation_accuracy": 0.8495547570692079,
+  "checkpoints": [
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_v1/checkpoint/best.pt",
+      "sha256": "47453951f0bdfb296f1987b5b8a658db6242c92029a410c2ab3951dc8e0d54a3",
+      "weight": 0.3,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8415872519918762
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_256_v1/checkpoint/best.pt",
+      "sha256": "e26080f9c92875bc2c8a71b0f1ca2e65df714e1ddac5396282a164fa7c82dd2b",
+      "weight": 0.7,
+      "epoch": 12,
+      "image_size": 256,
+      "validation_accuracy": 0.8454928917356663
+    }
+  ],
+  "minimum_validation": 0.8454928917356663,
+  "test_predicted": true,
+  "device": "cpu",
+  "submission_sha256": "e72992fd352b180d52c9a87b33e3042fefce72dfe32a469b366a36118c95ba60",
+  "experiment_id": "ensemble_224_256_v1",
+  "status": "COMPLETE",
+  "submission_status": "WAITING_QUOTA",
+  "submission_ref": null,
+  "public_score": null,
+  "previous_best_validation_accuracy": 0.8454928917356663,
+  "submission_decision": "Candidate passed validation; waiting for the conservative 24-hour submission limit and comparison with any newer best model."
+}
