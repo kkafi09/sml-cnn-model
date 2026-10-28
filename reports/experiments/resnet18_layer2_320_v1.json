@@ -33,7 +33,16 @@
   "cuda_available": true,
   "previous_best_validation_accuracy": 0.8454928917356663,
   "previous_best_public_score": 0.84107,
-  "observed_epochs": [],
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.1699,
+      "train_accuracy": 0.6599,
+      "validation_loss": 0.8033,
+      "validation_accuracy": 0.7621,
+      "corrupt_images": 1
+    }
+  ],
   "best_validation_accuracy": null,
   "public_score": null,
   "started_at_utc": "2026-10-28T02:14:14.423000Z",
