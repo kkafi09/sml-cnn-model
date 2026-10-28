@@ -28,9 +28,9 @@
   "submission_sha256": "e72992fd352b180d52c9a87b33e3042fefce72dfe32a469b366a36118c95ba60",
   "experiment_id": "ensemble_224_256_v1",
   "status": "COMPLETE",
-  "submission_status": "WAITING_QUOTA",
+  "submission_status": "NOT_SUBMITTED",
   "submission_ref": null,
   "public_score": null,
   "previous_best_validation_accuracy": 0.8454928917356663,
-  "submission_decision": "Candidate passed validation; waiting for the conservative 24-hour submission limit and comparison with any newer best model."
+  "submission_decision": "Equal-weight ensemble achieved higher validation accuracy and was submitted instead."
 }

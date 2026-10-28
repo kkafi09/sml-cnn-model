@@ -32,8 +32,19 @@ def kaggle_submissions() -> list[dict]:
     return rows
 
 
-def count_recent(rows: list[dict], now: datetime) -> int:
-    """Count submissions in the past 24 hours or current UTC day, conservatively."""
+def allowed_now() -> int:
+    """Read the team's current allowance from Kaggle or fail closed."""
+    command = ["kaggle", "competitions", "submission-limits", COMPETITION, "--json"]
+    result = subprocess.run(command, check=True, capture_output=True, text=True)
+    limits = json.loads(result.stdout)
+    remaining = limits.get("numAllowedNow") if isinstance(limits, dict) else None
+    if isinstance(remaining, bool) or not isinstance(remaining, int) or remaining < 0:
+        raise ValueError("Kaggle did not provide an unambiguous submission allowance")
+    return remaining
+
+
+def count_today(rows: list[dict], now: datetime) -> int:
+    """Count submissions on the current UTC date, including pending attempts."""
     count = 0
     for row in rows:
         value = row.get("date")
@@ -45,7 +56,7 @@ def count_recent(rows: list[dict], now: datetime) -> int:
         submitted = submitted.astimezone(timezone.utc)
         if submitted > now + timedelta(minutes=5):
             raise ValueError("Submission history contains a future date")
-        if submitted >= now - timedelta(hours=24) or submitted.date() == now.date():
+        if submitted.date() == now.date():
             count += 1
     return count
 
@@ -111,8 +122,9 @@ def main() -> None:
     args = parser.parse_args()
     rows = kaggle_submissions()
     sync_history(rows, args.history)
-    used = count_recent(rows, datetime.now(timezone.utc))
-    print(f"Conservative submission count: {used}/{LIMIT}", flush=True)
+    used = count_today(rows, datetime.now(timezone.utc))
+    available = allowed_now()
+    print(f"UTC submission count: {used}/{LIMIT}; Kaggle available now: {available}", flush=True)
     scores = [float(row["publicScore"]) for row in rows if row.get("publicScore")]
     if scores:
         print(f"Best public score: {max(scores):.5f}; target: {PUBLIC_TARGET:.5f}", flush=True)
@@ -120,7 +132,7 @@ def main() -> None:
         return
     if args.experiment_dir is None:
         parser.error("--experiment-dir is required unless --sync-only is specified")
-    if used >= LIMIT and not args.dry_run:
+    if (used >= LIMIT or available < 1) and not args.dry_run:
         raise RuntimeError("Daily submission limit reached; stopping")
     if not args.history.exists():
         raise FileNotFoundError("Submission history CSV is missing")
@@ -202,7 +214,7 @@ def main() -> None:
     if any(row.get("description") == message for row in rows):
         raise RuntimeError("This candidate already appears in Kaggle submission history")
     if args.dry_run:
-        print(f"Candidate validated: {message}; conservative quota {used}/{LIMIT}", flush=True)
+        print(f"Candidate validated: {message}; UTC quota {used}/{LIMIT}, Kaggle available {available}", flush=True)
         return
     archive = Path("submissions") / f"{model}_{digest}.csv"
     archive.parent.mkdir(parents=True, exist_ok=True)
@@ -213,6 +225,11 @@ def main() -> None:
                 "submission_sha256": hashlib.sha256(archive.read_bytes()).hexdigest(),
                 "validation_accuracy": score, "model": model}
     archive.with_suffix(".json").write_text(json.dumps(manifest, indent=2) + "\n")
+    current_rows = kaggle_submissions()
+    if count_today(current_rows, datetime.now(timezone.utc)) >= LIMIT or allowed_now() < 1:
+        raise RuntimeError("Submission allowance was exhausted before upload; stopping")
+    if any(row.get("description") == message for row in current_rows):
+        raise RuntimeError("This candidate appeared in Kaggle submission history before upload")
     command = ["kaggle", "competitions", "submit", "-c", COMPETITION,
                "-f", str(archive), "-m", message]
     result = subprocess.run(command, check=True, capture_output=True, text=True)

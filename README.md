@@ -156,7 +156,7 @@ Eksperimen v1 dibatalkan sebelum log tersedia; v2 membuktikan Tesla T4 aktif, te
 
 Submission v3 (`57698008`) mendapat public score **0,82057 (82,057%)**, naik **4,893 poin persentase** dari baseline Kaggle 77,164% dan melampaui target 79,164%. Private score belum tersedia. Submission CSV dan hash manifest tersimpan di `submissions/`; riwayat seluruh submission ada di `reports/submission_history.csv`.
 
-Untuk loop ini, kandidat berikutnya dikirim jika validation accuracy **di atas 80%** dan mengalahkan model terbaik sebelumnya. Skrip `scripts/submit_candidate.py` memeriksa validasi, checkpoint, format/urutan CSV, dan riwayat Kaggle sebelum mengirim; skrip berhenti bila hitungan submission mencapai lima. Perhitungan kuota menggunakan 24 jam terakhir atau hari UTC sebagai batas konservatif. Petunjuk lengkap ada di [workflow.md](workflow.md).
+Untuk loop ini, kandidat berikutnya dikirim jika validation accuracy **di atas 80%** dan mengalahkan model terbaik sebelumnya. Skrip `scripts/submit_candidate.py` memeriksa validasi, checkpoint, format/urutan CSV, dan riwayat Kaggle sebelum mengirim; skrip berhenti bila hitungan submission mencapai lima. Kuota diperiksa berdasarkan hitungan hari UTC dan jumlah yang tersedia dari `kaggle competitions submission-limits`. Petunjuk lengkap ada di [workflow.md](workflow.md).
 
 Run v4 membandingkan ResNet-50 dengan padding putih untuk mempertahankan proporsi halaman, learning rate `5e-5`, dan empat epoch maksimum di Tesla T4. Best validation accuracy **80,019%** pada epoch 4. Prediksi untuk semua 7.994 baris test berhasil dibuat dan divalidasi. Run ini tidak disubmit karena hasilnya di bawah model terbaik sebelumnya (82,862% validation; public score 82,057%). Log per epoch dan hasil lengkap tersimpan di `reports/experiments/resnet50_aspect_v1/`; ringkasan konfigurasi ada di `reports/experiments/resnet50_aspect_v1.json`.
 
@@ -173,3 +173,5 @@ Tren hasil validation dan public leaderboard per submission:
 ![Tren accuracy validation dan public leaderboard](reports/figures/submission_progress.png)
 
 Pada 28 Oktober, ensemble probabilitas dua checkpoint ResNet-18 berukuran 224px dan 256px (bobot 0,3 dan 0,7) mencapai **84,955% validation accuracy** pada split yang sama. Prediksi 7.994 ID dan hash checkpoint telah diperiksa; kandidat menunggu kuota dan belum memiliki public score. Konfigurasi dan metrik ada di `reports/experiments/ensemble_224_256_v1.json`. Evaluasi dapat diulang dengan `scripts/evaluate_ensemble.py`; checkpoint berasal dari output kernel masing-masing dan tetap diabaikan Git.
+
+Ensemble dengan bobot sama untuk checkpoint 224px dan 256px mencapai **85,362% validation accuracy** dan dikirim sebagai submission `57721904` pada 28 Oktober. Public score-nya **0,84274 (84,274%)**, naik 0,167 poin persentase dari public best sebelumnya. Riwayat konfigurasi dan hash ada di `reports/experiments/ensemble_224_256_equal_v1.json` dan `reports/submission_history.csv`.

@@ -213,7 +213,7 @@ python scripts/submit_candidate.py --experiment-dir kaggle_kernel_outputs/resnet
 python scripts/submit_candidate.py --sync-only
 ```
 
-Skrip mengecek ulang riwayat submission di Kaggle, membatasi jumlah secara konservatif untuk 24 jam terakhir atau hari UTC, memastikan validation accuracy checkpoint sesuai laporan, di atas 80%, dan mengalahkan skor model terdahulu, serta memvalidasi seluruh 7.994 ID dan label. CSV submission disalin ke nama unik berdasarkan hash; manifest mencatat hash checkpoint, laporan, dan CSV; ref serta score yang tersedia dicatat di `reports/submission_history.csv`. Jika riwayat Kaggle tidak dapat diperiksa atau API mengembalikan hasil yang ambigu, hentikan dan selidiki sebelum mencoba lagi. Pastikan CSV dan checkpoint memang berasal dari run yang sama dengan meninjau output kernel. Gunakan `--sync-only` kembali untuk memperbarui score setelah Kaggle selesai menilai.
+Skrip mengecek ulang riwayat submission di Kaggle, memeriksa hitungan hari UTC dan allowance resmi dari `kaggle competitions submission-limits`, memastikan validation accuracy checkpoint sesuai laporan, di atas 80%, dan mengalahkan skor model terdahulu, serta memvalidasi seluruh 7.994 ID dan label. CSV submission disalin ke nama unik berdasarkan hash; manifest mencatat hash checkpoint, laporan, dan CSV; ref serta score yang tersedia dicatat di `reports/submission_history.csv`. Jika riwayat Kaggle tidak dapat diperiksa atau API mengembalikan hasil yang ambigu, hentikan dan selidiki sebelum mencoba lagi. Pastikan CSV dan checkpoint memang berasal dari run yang sama dengan meninjau output kernel. Gunakan `--sync-only` kembali untuk memperbarui score setelah Kaggle selesai menilai.
 
 Baseline ResNet-18 telah dikirim dari `submissions/submission.csv` dengan deskripsi `ResNet18 baseline`. Kaggle mengembalikan submission ref `57695733`, status `COMPLETE`, public score `0.77164`; private score belum tersedia. Perintah aktual:
 
@@ -249,4 +249,4 @@ Skrip membandingkan validation dan membuat prediksi test hanya jika ensemble mel
   --experiment-dir kaggle_kernel_outputs/ensemble_224_256_v1
 ```
 
-Pelindung menghitung submission dalam 24 jam terakhir atau hari UTC saat ini, mana pun yang lebih konservatif. Periksa ulang status kuota tepat sebelum mengirim; jangan mengirim berulang untuk mengisi slot.
+Pelindung menghitung submission pada hari UTC dan memeriksa `numAllowedNow` dari `kaggle competitions submission-limits --json`. Keduanya diperiksa kembali sebelum upload; jika API tidak dapat memberikan allowance yang jelas, pengiriman dihentikan. Jangan mengirim berulang untuk mengisi slot.
