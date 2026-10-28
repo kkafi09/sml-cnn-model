@@ -1,0 +1,62 @@
+{
+  "experiment_id": "ensemble_aug_weight_comparison",
+  "status": "ANALYSIS",
+  "description": "Compare four fixed augmentation checkpoint weights on the same validation split; repeated selection can overfit. The selected weight ties the best validation accuracy and changes the previously submitted ensemble less.",
+  "seed": 42,
+  "member_order": [
+    "224",
+    "256",
+    "320",
+    "smooth",
+    "384",
+    "aug"
+  ],
+  "unnormalized_weights_tested": [
+    [
+      1,
+      1,
+      1,
+      0.5,
+      1,
+      0.25
+    ],
+    [
+      1,
+      1,
+      1,
+      0.5,
+      1,
+      0.5
+    ],
+    [
+      1,
+      1,
+      1,
+      0.5,
+      1,
+      0.75
+    ],
+    [
+      1,
+      1,
+      1,
+      0.5,
+      1,
+      1
+    ]
+  ],
+  "validation_accuracy": [
+    0.86595844,
+    0.86611467,
+    0.86595844,
+    0.86611467
+  ],
+  "selected_unnormalized_weights": [
+    1,
+    1,
+    1,
+    0.5,
+    1,
+    0.5
+  ]
+}
