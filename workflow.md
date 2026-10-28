@@ -261,3 +261,11 @@ PYTHONPATH=src .venv/bin/python scripts/analyze_ensemble_errors.py \
   --cache-dir kaggle_kernel_outputs/ensemble_cache \
   --output reports/experiments/ensemble_224_256_320_smooth_v1/per_class.csv
 ```
+
+Jika satu checkpoint beresolusi tinggi masih terlalu lama untuk satu sesi, buat cache test per 800 gambar dengan perintah berikut. Setiap bagian disimpan secara atomik dan dapat digunakan kembali saat perintah diulang; setelah seluruh bagian selesai, skrip merakit cache yang digunakan `evaluate_ensemble.py`:
+
+```bash
+PYTHONPATH=src .venv/bin/python scripts/cache_test_probabilities.py \
+  --checkpoint kaggle_kernel_outputs/resnet18_layer2_384_v1/checkpoint/best.pt \
+  --cache-dir kaggle_kernel_outputs/ensemble_cache
+```

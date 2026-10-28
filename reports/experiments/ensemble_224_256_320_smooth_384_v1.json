@@ -1,6 +1,6 @@
 {
   "experiment_id": "ensemble_224_256_320_smooth_384_v1",
-  "status": "RUNNING",
+  "status": "INTERRUPTED",
   "model": "weighted probability ensemble",
   "seed": 42,
   "members": [
@@ -20,5 +20,7 @@
   "previous_best_validation_accuracy": 0.8626777066083424,
   "previous_best_public_score": 0.85487,
   "device": "cpu",
-  "public_score": null
+  "public_score": null,
+  "validation_accuracy_observed": 0.86502109,
+  "submission_decision": "Process interrupted while producing test predictions; resume in atomic chunks. A validation weight comparison identified a stronger 384px weight."
 }
