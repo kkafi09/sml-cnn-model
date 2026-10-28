@@ -1,0 +1,56 @@
+{
+  "checkpoints": [
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_v1/checkpoint/best.pt",
+      "sha256": "47453951f0bdfb296f1987b5b8a658db6242c92029a410c2ab3951dc8e0d54a3",
+      "weight": 0.2,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8415872519918762
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_256_v1/checkpoint/best.pt",
+      "sha256": "e26080f9c92875bc2c8a71b0f1ca2e65df714e1ddac5396282a164fa7c82dd2b",
+      "weight": 0.2,
+      "epoch": 12,
+      "image_size": 256,
+      "validation_accuracy": 0.8454928917356663
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_320_v1/checkpoint/best.pt",
+      "sha256": "4b3780614ade03d593ba226781634cf4266a7683dd9d8370a394e00b6b051b75",
+      "weight": 0.2,
+      "epoch": 11,
+      "image_size": 320,
+      "validation_accuracy": 0.8484611779409468
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_smooth_v1/checkpoint/best.pt",
+      "sha256": "aa36aca0dde1551dcf1d58e19c66a610ffa11d3dbd23072822fc37f4ccb933b1",
+      "weight": 0.1,
+      "epoch": 11,
+      "image_size": 224,
+      "validation_accuracy": 0.8367442587095766
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_384_v1/checkpoint/best.pt",
+      "sha256": "f6e888c58fef00c1e17be3a4cd1f3d4886280a088ce31cf5c1d5b2ac3baf8b4e",
+      "weight": 0.2,
+      "epoch": 12,
+      "image_size": 384,
+      "validation_accuracy": 0.8472113732229339
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_aug_v1/checkpoint/best.pt",
+      "sha256": "e218d3ae4f489fa812cd053be16b191421b7e472276132929fba93464f4d9673",
+      "weight": 0.1,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8387751913763475
+    }
+  ],
+  "validation_report_sha256": "ed328c8e15c0ab9a17ef8b45e697154886231385967976c8003fd4eeb4c5c052",
+  "submission_sha256": "d2cbf1373dd9fe17118dd7817448c54358df5ad11145f9b97148ea9f4e70e5ef",
+  "validation_accuracy": 0.8661146695828776,
+  "model": "ensemble_resnet18"
+}

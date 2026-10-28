@@ -38,6 +38,11 @@ def allowed_now() -> int:
     result = subprocess.run(command, check=True, capture_output=True, text=True)
     limits = json.loads(result.stdout)
     remaining = limits.get("numAllowedNow") if isinstance(limits, dict) else None
+    # Kaggle's JSON omits the zero-valued allowance once the daily limit is used.
+    if remaining is None and isinstance(limits, dict):
+        today = limits.get("numToday")
+        if isinstance(today, int) and not isinstance(today, bool) and today >= LIMIT:
+            return 0
     if isinstance(remaining, bool) or not isinstance(remaining, int) or remaining < 0:
         raise ValueError("Kaggle did not provide an unambiguous submission allowance")
     return remaining
