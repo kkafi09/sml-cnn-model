@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet18_layer2_320_v1",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet18-layer2-320-v1",
   "kernel_version": 1,
   "architecture": "resnet18",
@@ -121,10 +121,21 @@
       "validation_loss": 0.5626,
       "validation_accuracy": 0.8485,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.1681,
+      "train_accuracy": 0.9578,
+      "validation_loss": 0.5642,
+      "validation_accuracy": 0.8467,
+      "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy": null,
+  "best_validation_accuracy": 0.8484611779409468,
   "public_score": null,
   "started_at_utc": "2026-10-28T02:14:14.423000Z",
-  "timeout_seconds": 7200
+  "timeout_seconds": 7200,
+  "kernel_status": "COMPLETE",
+  "best_epoch": 11,
+  "submission_decision": "Not submitted as a single model: validation is below the submitted equal-weight ensemble (0.8536166). Test CSV and checkpoint validated."
 }
