@@ -250,3 +250,5 @@ Skrip membandingkan validation dan membuat prediksi test hanya jika ensemble mel
 ```
 
 Pelindung menghitung submission pada hari UTC dan memeriksa `numAllowedNow` dari `kaggle competitions submission-limits --json`. Keduanya diperiksa kembali sebelum upload; jika API tidak dapat memberikan allowance yang jelas, pengiriman dihentikan. Jangan mengirim berulang untuk mengisi slot.
+
+Untuk inferensi CPU yang panjang, tambahkan `--cache-dir kaggle_kernel_outputs/ensemble_cache`. Hasil probabilitas setiap checkpoint dan split disimpan setelah satu model selesai; jalankan ulang perintah yang sama jika proses terputus. Cache diidentifikasi oleh hash checkpoint, urutan metadata, kode transformasi/model, versi library, perangkat, dan lokasi data, serta tidak di-commit. Dataset pada lokasi tersebut harus tetap sama selama cache digunakan.
