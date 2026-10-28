@@ -7,6 +7,8 @@ from pathlib import Path
 
 import numpy as np
 import torch
+import torchvision
+from PIL import __version__ as pillow_version
 from sklearn.model_selection import train_test_split
 from torch.utils.data import DataLoader
 
@@ -16,11 +18,29 @@ from document_classifier.submission import write_submission
 from document_classifier.transforms import build_image_transform
 
 
-def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_size, workers):
+def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_size, workers, cache_dir):
     """Return probabilities in metadata order using the checkpoint's own transform."""
     checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)
     if checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16:
         raise ValueError(f"Unexpected seed or class count in {checkpoint_path}")
+    root = Path(__file__).resolve().parents[1]
+    key = hashlib.sha256()
+    for payload in (checkpoint_path.read_bytes(), metadata[["id", "filename"]].to_csv(index=False).encode(),
+                    str(Path(data_dir).resolve()).encode(), str(device).encode(),
+                    torch.__version__.encode(), torchvision.__version__.encode(), pillow_version.encode(),
+                    Path(__file__).read_bytes(),
+                    *(root.joinpath("src/document_classifier", name).read_bytes()
+                      for name in ("data.py", "model.py", "transforms.py"))):
+        key.update(hashlib.sha256(payload).digest())
+    cache_dir.mkdir(parents=True, exist_ok=True)
+    cache_path = cache_dir / f"{key.hexdigest()}.npz"
+    if cache_path.is_file():
+        with np.load(cache_path, allow_pickle=False) as cached:
+            probabilities = cached["probabilities"]
+        if probabilities.shape != (len(metadata), 16) or not np.isfinite(probabilities).all():
+            raise ValueError(f"Invalid probability cache: {cache_path}")
+        print(f"Using cached probabilities: {cache_path}", flush=True)
+        return probabilities, checkpoint
     model = DocumentCNN(pretrained=False, architecture=checkpoint["architecture"]).to(device)
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
@@ -44,6 +64,9 @@ def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_siz
     probabilities = np.concatenate(outputs)
     if probabilities.shape != (len(metadata), 16) or not np.isfinite(probabilities).all():
         raise ValueError("Invalid model probabilities")
+    temporary_path = cache_path.with_suffix(".partial.npz")
+    np.savez_compressed(temporary_path, probabilities=probabilities)
+    temporary_path.replace(cache_path)
     return probabilities, checkpoint
 
 
@@ -54,6 +77,7 @@ def main():
     parser.add_argument("--weight", type=float, action="append", required=True)
     parser.add_argument("--data-dir", type=Path, default=Path("data"))
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--cache-dir", type=Path, help="Reusable probability cache; defaults to output-dir/cache")
     parser.add_argument("--minimum-validation", type=float, required=True)
     parser.add_argument("--batch-size", type=int, default=16)
     parser.add_argument("--workers", type=int, default=2)
@@ -75,12 +99,13 @@ def main():
     if len(validation) != 6401 or len(test) != 7994:
         raise ValueError("Unexpected validation or test sample count")
     args.output_dir.mkdir(parents=True, exist_ok=True)
+    cache_dir = args.cache_dir or args.output_dir / "cache"
     labels = validation["label"].to_numpy(dtype=np.int64)
     validation_probabilities = []
     checkpoint_info = []
     for path, weight in zip(args.checkpoint, weights):
         probabilities, checkpoint = predict_probabilities(
-            path, validation, args.data_dir, device, args.batch_size, args.workers)
+            path, validation, args.data_dir, device, args.batch_size, args.workers, cache_dir)
         score = float((probabilities.argmax(axis=1) == labels).mean())
         if abs(score - float(checkpoint["validation_accuracy"])) > 2 / len(labels):
             raise ValueError(f"Validation score does not reproduce checkpoint {path}")
@@ -102,7 +127,7 @@ def main():
         test_probabilities = []
         for path in args.checkpoint:
             probabilities, _ = predict_probabilities(
-                path, test, args.data_dir, device, args.batch_size, args.workers)
+                path, test, args.data_dir, device, args.batch_size, args.workers, cache_dir)
             test_probabilities.append(probabilities)
         combined_test = sum(weight * probs for weight, probs in zip(weights, test_probabilities))
         submission_path = args.output_dir / "submission.csv"

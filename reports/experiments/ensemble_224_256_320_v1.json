@@ -1,0 +1,19 @@
+{
+  "experiment_id": "ensemble_224_256_320_v1",
+  "status": "INTERRUPTED",
+  "device": "cpu",
+  "validation_accuracy_observed": 0.86033432,
+  "weights": [
+    0.3333333333333333,
+    0.3333333333333333,
+    0.3333333333333333
+  ],
+  "image_sizes": [
+    224,
+    256,
+    320
+  ],
+  "seed": 42,
+  "reason": "Process exited 143 while generating test predictions; validation observed in log, no complete submission produced. Resuming with per-model probability cache.",
+  "public_score": null
+}
