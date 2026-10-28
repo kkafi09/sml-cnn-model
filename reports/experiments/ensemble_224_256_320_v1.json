@@ -1,19 +1,56 @@
 {
-  "experiment_id": "ensemble_224_256_320_v1",
-  "status": "INTERRUPTED",
-  "device": "cpu",
-  "validation_accuracy_observed": 0.86033432,
-  "weights": [
-    0.3333333333333333,
-    0.3333333333333333,
-    0.3333333333333333
-  ],
-  "image_sizes": [
-    224,
-    256,
-    320
-  ],
+  "model": "weighted probability ensemble",
   "seed": 42,
-  "reason": "Process exited 143 while generating test predictions; validation observed in log, no complete submission produced. Resuming with per-model probability cache.",
-  "public_score": null
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "best_validation_accuracy": 0.8603343227620684,
+  "checkpoints": [
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_v1/checkpoint/best.pt",
+      "sha256": "47453951f0bdfb296f1987b5b8a658db6242c92029a410c2ab3951dc8e0d54a3",
+      "weight": 0.3333333333333333,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8415872519918762
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_256_v1/checkpoint/best.pt",
+      "sha256": "e26080f9c92875bc2c8a71b0f1ca2e65df714e1ddac5396282a164fa7c82dd2b",
+      "weight": 0.3333333333333333,
+      "epoch": 12,
+      "image_size": 256,
+      "validation_accuracy": 0.8454928917356663
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_320_v1/checkpoint/best.pt",
+      "sha256": "4b3780614ade03d593ba226781634cf4266a7683dd9d8370a394e00b6b051b75",
+      "weight": 0.3333333333333333,
+      "epoch": 11,
+      "image_size": 320,
+      "validation_accuracy": 0.8484611779409468
+    }
+  ],
+  "minimum_validation": 0.8536166224027496,
+  "test_predicted": true,
+  "device": "cpu",
+  "submission_sha256": "1fdd18f7dc666ae4be355d22cfd77063508ee9e0d79dc8b49389de235bdd5317",
+  "experiment_id": "ensemble_224_256_320_v1",
+  "status": "COMPLETE",
+  "submission_status": "COMPLETE",
+  "submission_ref": "57724036",
+  "public_score": 0.85278,
+  "previous_best_validation_accuracy": 0.8536166224027496,
+  "previous_best_public_score": 0.84274,
+  "submission_artifact": "submissions/ensemble_resnet18_1fdd18f7dc66.csv",
+  "attempts": [
+    {
+      "status": "INTERRUPTED",
+      "exit_code": 143,
+      "note": "Test inference interrupted; restarted using per-model probability cache."
+    },
+    {
+      "status": "COMPLETE",
+      "note": "Validation and test inference completed with cache."
+    }
+  ]
 }
