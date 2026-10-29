@@ -29,7 +29,7 @@ def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_siz
     for payload in (checkpoint_path.read_bytes(), metadata[["id", "filename"]].to_csv(index=False).encode(),
                     str(Path(data_dir).resolve()).encode(), str(device).encode(),
                     torch.__version__.encode(), torchvision.__version__.encode(), pillow_version.encode(),
-                    subprocess.check_output(["git", "show", "HEAD:scripts/evaluate_ensemble.py"]),
+                    subprocess.check_output(["git", "show", "b7d15f4:scripts/evaluate_ensemble.py"]),
                     *(root.joinpath("src/document_classifier", name).read_bytes()
                       for name in ("data.py", "model.py", "transforms.py"))):
         key.update(hashlib.sha256(payload).digest())
