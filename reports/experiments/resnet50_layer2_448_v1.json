@@ -1,0 +1,32 @@
+{
+  "experiment_id": "resnet50_layer2_448_v1",
+  "status": "RUNNING",
+  "kernel_ref": "muhammadkafanalkafi/document-classification-resnet50-layer2-448-v1",
+  "kernel_version": 1,
+  "architecture": "resnet50",
+  "pretrained_weights": "ImageNet",
+  "unfreeze_from": "layer2",
+  "preserve_aspect_ratio": true,
+  "seed": 42,
+  "validation_split": 0.2,
+  "image_size": 448,
+  "batch_size": 6,
+  "learning_rate": 5e-05,
+  "label_smoothing": 0.0,
+  "max_epochs": 12,
+  "early_stopping_patience": 3,
+  "requested_accelerator": "NvidiaTeslaT4",
+  "confirmed_accelerator": "Tesla T4",
+  "cuda_available": true,
+  "observed_epochs": [
+    {"epoch": 1, "train_loss": 1.3199, "train_accuracy": 0.6007, "validation_loss": 0.9068, "validation_accuracy": 0.7277},
+    {"epoch": 2, "train_loss": 0.8078, "train_accuracy": 0.7609, "validation_loss": 0.6947, "validation_accuracy": 0.7997},
+    {"epoch": 3, "train_loss": 0.6487, "train_accuracy": 0.8082, "validation_loss": 0.6557, "validation_accuracy": 0.8132}
+  ],
+  "best_epoch_observed": 3,
+  "best_validation_accuracy_observed": 0.8132,
+  "corrupt_train_images": 1,
+  "test_prediction_rows": null,
+  "checkpoint_recovered": false,
+  "submission_decision": "Awaiting run completion and validation comparison; no submission decision made."
+}
