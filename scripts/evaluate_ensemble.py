@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 import numpy as np
 import torch
@@ -28,7 +29,7 @@ def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_siz
     for payload in (checkpoint_path.read_bytes(), metadata[["id", "filename"]].to_csv(index=False).encode(),
                     str(Path(data_dir).resolve()).encode(), str(device).encode(),
                     torch.__version__.encode(), torchvision.__version__.encode(), pillow_version.encode(),
-                    Path(__file__).read_bytes(),
+                    subprocess.check_output(["git", "show", "HEAD:scripts/evaluate_ensemble.py"]),
                     *(root.joinpath("src/document_classifier", name).read_bytes()
                       for name in ("data.py", "model.py", "transforms.py"))):
         key.update(hashlib.sha256(payload).digest())
@@ -52,12 +53,33 @@ def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_siz
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=workers,
                         pin_memory=device.type == "cuda")
     outputs, ids = [], []
+    progress_path = cache_path.with_suffix(".progress.npz")
+    completed_batches = 0
+    if progress_path.is_file():
+        with np.load(progress_path, allow_pickle=False) as progress:
+            cached_outputs = progress["probabilities"]
+            completed_batches = int(progress["completed_batches"])
+            cached_ids = progress["ids"].astype(str).tolist()
+        expected_cached = min(completed_batches * batch_size, len(metadata))
+        if (cached_outputs.shape != (expected_cached, 16) or len(cached_ids) != expected_cached
+                or cached_ids != metadata["id"].astype(str).tolist()[:expected_cached]
+                or not np.isfinite(cached_outputs).all()):
+            raise ValueError(f"Invalid partial probability cache: {progress_path}")
+        outputs.append(cached_outputs)
+        ids.extend(cached_ids)
+        print(f"Resuming {checkpoint_path.name} at {expected_cached}/{len(metadata)} samples", flush=True)
     with torch.inference_mode():
         for index, (images, batch_ids) in enumerate(loader, 1):
-            outputs.append(model(images.to(device)).softmax(dim=1).cpu().numpy())
+            if index <= completed_batches:
+                continue
+            batch_outputs = model(images.to(device)).softmax(dim=1).cpu().numpy()
+            outputs.append(batch_outputs)
             ids.extend(batch_ids)
-            if index % 50 == 0 or index == len(loader):
+            if index % 10 == 0 or index == len(loader):
                 print(f"{checkpoint_path.name}: {index}/{len(loader)} batches", flush=True)
+            if index % 25 == 0 or index == len(loader):
+                np.savez_compressed(progress_path, probabilities=np.concatenate(outputs),
+                                    ids=np.asarray(ids, dtype="U"), completed_batches=index)
     expected_ids = metadata["id"].astype(str).tolist()
     if ids != expected_ids:
         raise ValueError("Prediction IDs do not match metadata in order")
@@ -67,6 +89,7 @@ def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_siz
     temporary_path = cache_path.with_suffix(".partial.npz")
     np.savez_compressed(temporary_path, probabilities=probabilities)
     temporary_path.replace(cache_path)
+    progress_path.unlink(missing_ok=True)
     return probabilities, checkpoint
 
 

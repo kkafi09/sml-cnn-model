@@ -1,0 +1,85 @@
+{
+  "model": "weighted probability ensemble",
+  "seed": 42,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "best_validation_accuracy": 0.873457272301203,
+  "checkpoints": [
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_v1/checkpoint/best.pt",
+      "sha256": "47453951f0bdfb296f1987b5b8a658db6242c92029a410c2ab3951dc8e0d54a3",
+      "weight": 0.1472727272589091,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8415872519918762
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_256_v1/checkpoint/best.pt",
+      "sha256": "e26080f9c92875bc2c8a71b0f1ca2e65df714e1ddac5396282a164fa7c82dd2b",
+      "weight": 0.1472727272589091,
+      "epoch": 12,
+      "image_size": 256,
+      "validation_accuracy": 0.8454928917356663
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_320_v1/checkpoint/best.pt",
+      "sha256": "4b3780614ade03d593ba226781634cf4266a7683dd9d8370a394e00b6b051b75",
+      "weight": 0.1472727272589091,
+      "epoch": 11,
+      "image_size": 320,
+      "validation_accuracy": 0.8484611779409468
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_smooth_v1/checkpoint/best.pt",
+      "sha256": "aa36aca0dde1551dcf1d58e19c66a610ffa11d3dbd23072822fc37f4ccb933b1",
+      "weight": 0.07363636362945455,
+      "epoch": 11,
+      "image_size": 224,
+      "validation_accuracy": 0.8367442587095766
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_384_v1/checkpoint/best.pt",
+      "sha256": "f6e888c58fef00c1e17be3a4cd1f3d4886280a088ce31cf5c1d5b2ac3baf8b4e",
+      "weight": 0.1472727272589091,
+      "epoch": 12,
+      "image_size": 384,
+      "validation_accuracy": 0.8472113732229339
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_aug_v1/checkpoint/best.pt",
+      "sha256": "e218d3ae4f489fa812cd053be16b191421b7e472276132929fba93464f4d9673",
+      "weight": 0.07363636362945455,
+      "epoch": 12,
+      "image_size": 224,
+      "validation_accuracy": 0.8387751913763475
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet18_layer2_448_v1/checkpoint/best.pt",
+      "sha256": "26124a9ad08170fbf86daf9f8127112481c00fcc5be7d1f33f9352be9492a400",
+      "weight": 0.07363636362945455,
+      "epoch": 11,
+      "image_size": 448,
+      "validation_accuracy": 0.8617403530698329
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet50_layer2_256_v1/checkpoint/best.pt",
+      "sha256": "802334bda1ed4ae8d7ae1f3e39f640f6176ba3680839d776492e2ae3ba4e2a40",
+      "weight": 0.090000000036,
+      "epoch": 10,
+      "image_size": 256,
+      "validation_accuracy": 0.8468989220434308
+    },
+    {
+      "path": "kaggle_kernel_outputs/resnet50_layer2_320_v1/checkpoint/best.pt",
+      "sha256": "7965f2bedc95efe9c64399f6690acb57de3107ead53fa1947524d6f23013df7b",
+      "weight": 0.10000000004000001,
+      "epoch": 12,
+      "image_size": 320,
+      "validation_accuracy": 0.8642399625058584
+    }
+  ],
+  "minimum_validation": 0.8708014372754257,
+  "test_predicted": true,
+  "device": "cpu",
+  "submission_sha256": "e020f705e91eaf64d63ddfcd8c0c42adb7b6bc7e75dd8429345a123c312e5999"
+}
