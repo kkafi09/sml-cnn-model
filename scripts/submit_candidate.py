@@ -178,21 +178,24 @@ def main() -> None:
         weights = [float(member["weight"]) for member in members]
         if any(not math.isfinite(w) or w < 0 for w in weights) or not math.isclose(sum(weights), 1.0, abs_tol=1e-8):
             raise ValueError("Invalid ensemble weights")
+        architectures = set()
         for member in members:
             path = Path(member["path"])
             if hashlib.sha256(path.read_bytes()).hexdigest() != member["sha256"]:
                 raise ValueError(f"Checkpoint hash does not match ensemble report: {path}")
             checkpoint = torch.load(path, map_location="cpu", weights_only=True)
+            architecture = checkpoint.get("architecture")
             if (checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16
-                    or checkpoint.get("architecture") != "resnet18"
+                    or architecture not in {"resnet18", "resnet50"}
                     or int(checkpoint["epoch"]) != int(member["epoch"])
                     or int(checkpoint["image_size"]) != int(member["image_size"])
                     or abs(float(checkpoint["validation_accuracy"]) - float(member["validation_accuracy"])) > 2 / 6401):
                 raise ValueError(f"Checkpoint metadata does not match ensemble report: {path}")
-        model = "ensemble_resnet18"
+            architectures.add(architecture)
+        model = "ensemble_" + "_".join(sorted(architectures))
         configuration = {"method": "weighted probability mean", "members": members}
         manifest_checkpoints = {"checkpoints": members}
-        description = "ensemble_resnet18 " + "+".join(
+        description = model + " " + "+".join(
             f"{member['image_size']}x{member['weight']:g}" for member in members)
     else:
         checkpoint = torch.load(checkpoint_path, map_location="cpu", weights_only=True)

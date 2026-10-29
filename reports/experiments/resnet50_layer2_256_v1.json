@@ -1,0 +1,115 @@
+{
+  "experiment_id": "resnet50_layer2_256_v1",
+  "status": "COMPLETE",
+  "kernel_ref": "muhammadkafanalkafi/document-classification-resnet50-layer2-256-v1",
+  "kernel_version": 1,
+  "architecture": "resnet50",
+  "pretrained_weights": "ImageNet",
+  "unfreeze_from": "layer2",
+  "preserve_aspect_ratio": true,
+  "seed": 42,
+  "validation_split": 0.2,
+  "image_size": 256,
+  "batch_size": 16,
+  "learning_rate": 5e-05,
+  "label_smoothing": 0.0,
+  "max_epochs": 12,
+  "early_stopping_patience": 3,
+  "requested_accelerator": "NvidiaTeslaT4",
+  "confirmed_accelerator": "Tesla T4",
+  "cuda_available": true,
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.3269700193902458,
+      "train_accuracy": 0.6044685754462716,
+      "validation_loss": 0.8385664606267559,
+      "validation_accuracy": 0.7530073426027183
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7968820219537969,
+      "train_accuracy": 0.7636029842584274,
+      "validation_loss": 0.6905594170239033,
+      "validation_accuracy": 0.7931573191688799
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.6354242746059161,
+      "train_accuracy": 0.8089527752822155,
+      "validation_loss": 0.6390412737642105,
+      "validation_accuracy": 0.8112794875800656
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5200600616308233,
+      "train_accuracy": 0.8427795789226983,
+      "validation_loss": 0.5968922919056433,
+      "validation_accuracy": 0.8239337603499454
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.42633796850932604,
+      "train_accuracy": 0.8691847974688489,
+      "validation_loss": 0.5977629112698681,
+      "validation_accuracy": 0.8309639118887674
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.3559671755922171,
+      "train_accuracy": 0.889223077223546,
+      "validation_loss": 0.5851125353541347,
+      "validation_accuracy": 0.8312763630682706
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.2969206785146186,
+      "train_accuracy": 0.9085973204171712,
+      "validation_loss": 0.6014105772133699,
+      "validation_accuracy": 0.8340884236837994
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.24584194274764662,
+      "train_accuracy": 0.9247685637279793,
+      "validation_loss": 0.6081939042945643,
+      "validation_accuracy": 0.8415872519918762
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.20519601603415016,
+      "train_accuracy": 0.9359790633178392,
+      "validation_loss": 0.6481596568261501,
+      "validation_accuracy": 0.8347133260428058
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.12564363552576166,
+      "train_accuracy": 0.9611733916643881,
+      "validation_loss": 0.6385899487818252,
+      "validation_accuracy": 0.8468989220434308
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.09591261773280679,
+      "train_accuracy": 0.9714854888480918,
+      "validation_loss": 0.6633223241024561,
+      "validation_accuracy": 0.8434619590688955
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.06570149022118313,
+      "train_accuracy": 0.9816804031092535,
+      "validation_loss": 0.6705404719944686,
+      "validation_accuracy": 0.8445555381971567
+    }
+  ],
+  "best_epoch": 10,
+  "best_validation_accuracy": 0.8468989220434308,
+  "test_prediction_rows": 7994,
+  "kernel_status": "COMPLETE",
+  "corrupt_train_image_ids": [
+    "train_08795"
+  ],
+  "submission_decision": "Model alone did not beat the best ensemble; included at 10% weight in ensemble submission ref 57761588."
+}
