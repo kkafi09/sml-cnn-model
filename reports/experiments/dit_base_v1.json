@@ -1,0 +1,149 @@
+{
+  "experiment_id": "dit_base_v1",
+  "status": "COMPLETE",
+  "kernel_ref": "muhammadkafanalkafi/document-classification-dit-base-v1",
+  "kernel_version": 2,
+  "architecture": "dit_base",
+  "pretrained_weights": "microsoft/dit-base self-supervised IIT-CDIP",
+  "pretrained_label_finetuning": false,
+  "image_size": 224,
+  "batch_size": 16,
+  "learning_rate_backbone": 2e-05,
+  "learning_rate_classifier": 0.0001,
+  "optimizer": "AdamW",
+  "label_smoothing": 0.0,
+  "seed": 42,
+  "validation_split": 0.2,
+  "max_epochs": 12,
+  "early_stopping_patience": 3,
+  "requested_accelerator": "NvidiaTeslaT4",
+  "confirmed_accelerator": "Tesla T4",
+  "cuda_available": true,
+  "normalization": {
+    "mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "std": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.1832114063730967,
+      "train_accuracy": 0.6480215616577477,
+      "validation_loss": 0.6347014902090025,
+      "validation_accuracy": 0.8167473832213716
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.7035877121216124,
+      "train_accuracy": 0.7933283856099371,
+      "validation_loss": 0.5523171598053019,
+      "validation_accuracy": 0.8339321980940478
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.5844757786617023,
+      "train_accuracy": 0.8257880551540956,
+      "validation_loss": 0.5033610041941176,
+      "validation_accuracy": 0.850335885017966
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5102452402192678,
+      "train_accuracy": 0.84848248115308,
+      "validation_loss": 0.48217556424353986,
+      "validation_accuracy": 0.8609592251210748
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.4646479850632386,
+      "train_accuracy": 0.8612554197101676,
+      "validation_loss": 0.47852707868615807,
+      "validation_accuracy": 0.8609592251210748
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.37798999700968694,
+      "train_accuracy": 0.886137260263271,
+      "validation_loss": 0.432146457562219,
+      "validation_accuracy": 0.8803311982502734
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.3372737802226051,
+      "train_accuracy": 0.8968790281629624,
+      "validation_loss": 0.4249918484167568,
+      "validation_accuracy": 0.8826745820965474
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.3248807156715983,
+      "train_accuracy": 0.9028944181867896,
+      "validation_loss": 0.4140004448735904,
+      "validation_accuracy": 0.884393063583815
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.30666821069841105,
+      "train_accuracy": 0.9052380766376313,
+      "validation_loss": 0.41445301547111096,
+      "validation_accuracy": 0.8850179659428214
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.27817129890296677,
+      "train_accuracy": 0.9150033201828054,
+      "validation_loss": 0.4336681312194776,
+      "validation_accuracy": 0.882049679737541
+    },
+    {
+      "epoch": 11,
+      "train_loss": 0.23658087540080755,
+      "train_accuracy": 0.9273465880239053,
+      "validation_loss": 0.422286604581633,
+      "validation_accuracy": 0.8903296359943759
+    },
+    {
+      "epoch": 12,
+      "train_loss": 0.22632876055896536,
+      "train_accuracy": 0.9320729658997695,
+      "validation_loss": 0.44517811602711915,
+      "validation_accuracy": 0.8861115450710827
+    }
+  ],
+  "best_epoch_observed": 11,
+  "best_validation_accuracy_observed": 0.8903296359943759,
+  "corrupt_train_images": 1,
+  "test_prediction_rows": 7994,
+  "checkpoint_recovered": true,
+  "submission_decision": "Submitted as ref 57788724 after validation accuracy reached 0.8903296; Kaggle public score 0.88749 ranked first at synchronization on 2026-10-30.",
+  "kernel_status": "COMPLETE",
+  "corrupt_train_image_ids": [
+    "train_08795"
+  ],
+  "train_samples": 25602,
+  "train_samples_used": 25601,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "configuration": {
+    "epochs": 12,
+    "batch_size": 16,
+    "image_size": 224,
+    "learning_rate": 2e-05,
+    "label_smoothing": 0.0,
+    "unfreeze_from": "all",
+    "patience": 3,
+    "architecture": "dit_base",
+    "preserve_aspect_ratio": true
+  },
+  "submission_ref": "57788724",
+  "public_score": 0.88749,
+  "public_rank_at_sync": 1,
+  "daily_submissions_used_at_sync": 1
+}

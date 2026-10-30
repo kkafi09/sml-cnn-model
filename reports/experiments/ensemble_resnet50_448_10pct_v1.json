@@ -1,0 +1,14 @@
+{
+  "experiment_id": "ensemble_resnet50_448_10pct_v1",
+  "status": "STOPPED_EARLY",
+  "model": "weighted probability ensemble",
+  "seed": 42,
+  "base_ensemble_report": "reports/experiments/ensemble_resnet50_384_10pct_v1/validation_result.json",
+  "base_validation_accuracy": 0.876581784096235,
+  "added_checkpoint": "kaggle_kernel_outputs/resnet50_layer2_448_v1/checkpoint/best.pt",
+  "added_checkpoint_weight": 0.1,
+  "base_weights_scaled_by": 0.9,
+  "device": "cpu",
+  "progress_at_stop": "Probability inference was interrupted during checkpoint evaluation; no ensemble accuracy or test predictions were produced.",
+  "decision": "Not submitted. DiT-base already exceeded the current public leaderboard first-place score; this optional CPU evaluation was stopped to avoid spending further local runtime."
+}

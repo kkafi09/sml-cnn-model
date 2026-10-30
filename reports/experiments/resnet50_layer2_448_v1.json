@@ -1,6 +1,6 @@
 {
   "experiment_id": "resnet50_layer2_448_v1",
-  "status": "RUNNING",
+  "status": "CANCEL_ACKNOWLEDGED",
   "kernel_ref": "muhammadkafanalkafi/document-classification-resnet50-layer2-448-v1",
   "kernel_version": 1,
   "architecture": "resnet50",
@@ -19,14 +19,61 @@
   "confirmed_accelerator": "Tesla T4",
   "cuda_available": true,
   "observed_epochs": [
-    {"epoch": 1, "train_loss": 1.3199, "train_accuracy": 0.6007, "validation_loss": 0.9068, "validation_accuracy": 0.7277},
-    {"epoch": 2, "train_loss": 0.8078, "train_accuracy": 0.7609, "validation_loss": 0.6947, "validation_accuracy": 0.7997},
-    {"epoch": 3, "train_loss": 0.6487, "train_accuracy": 0.8082, "validation_loss": 0.6557, "validation_accuracy": 0.8132}
+    {
+      "epoch": 1,
+      "train_loss": 1.3199358946760509,
+      "train_accuracy": 0.6006796609507441,
+      "validation_loss": 0.9067590488337703,
+      "validation_accuracy": 0.7276987970629589
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.8078299379047891,
+      "train_accuracy": 0.7609468380141401,
+      "validation_loss": 0.6946807828813094,
+      "validation_accuracy": 0.7997187939384471
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.6487443527979236,
+      "train_accuracy": 0.8082106167727823,
+      "validation_loss": 0.655671034231747,
+      "validation_accuracy": 0.8131541946570848
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.5429955690513548,
+      "train_accuracy": 0.8380532010468341,
+      "validation_loss": 0.5883580985638884,
+      "validation_accuracy": 0.8373691610685831
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.47094279699544694,
+      "train_accuracy": 0.856060310144135,
+      "validation_loss": 0.5953641069369631,
+      "validation_accuracy": 0.8344008748633026
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.34480671870042207,
+      "train_accuracy": 0.8966446623178782,
+      "validation_loss": 0.5392001418973288,
+      "validation_accuracy": 0.8545539759412591
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.2896072993153826,
+      "train_accuracy": 0.9114878325065428,
+      "validation_loss": 0.5287715208367608,
+      "validation_accuracy": 0.8593969692235588
+    }
   ],
-  "best_epoch_observed": 3,
-  "best_validation_accuracy_observed": 0.8132,
+  "best_epoch_observed": 7,
+  "best_validation_accuracy_observed": 0.8593969692235588,
   "corrupt_train_images": 1,
-  "test_prediction_rows": null,
-  "checkpoint_recovered": false,
-  "submission_decision": "Awaiting run completion and validation comparison; no submission decision made."
+  "test_prediction_rows": 7994,
+  "checkpoint_recovered": true,
+  "submission_decision": "Checkpoint recovered after run cancellation; evaluated in an 11-model ensemble experiment. Not submitted because the standalone DiT-base submission has stronger validation and public scores.",
+  "kernel_status": "CANCEL_ACKNOWLEDGED"
 }

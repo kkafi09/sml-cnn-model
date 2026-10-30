@@ -269,3 +269,32 @@ PYTHONPATH=src .venv/bin/python scripts/cache_test_probabilities.py \
   --checkpoint kaggle_kernel_outputs/resnet18_layer2_384_v1/checkpoint/best.pt \
   --cache-dir kaggle_kernel_outputs/ensemble_cache
 ```
+
+
+## Eksperimen DiT-base (checkpoint self-supervised dokumen)
+
+DiT-base dari Microsoft/Hugging Face digunakan sebagai kandidat karena pretrained secara self-supervised pada IIT-CDIP. Jangan gunakan `dit-base-finetuned-rvlcdip` untuk pemilihan model proyek ini: checkpoint tersebut sudah memakai label benchmark RVL-CDIP. Hasil paper untuk benchmark penuh tidak dapat disamakan langsung dengan split kompetisi ini. Gunakan normalisasi DiT mean/std `0.5`, bukan statistik ImageNet.
+
+Untuk membangun ulang staging kernel dari repository:
+
+```bash
+.venv/bin/python scripts/build_kaggle_kernel.py \
+  --username muhammadkafanalkafi \
+  --slug document-classification-dit-base-v1 \
+  --output kaggle_kernel_dit_base_v1 \
+  --architecture dit_base \
+  --unfreeze-from layer2 \
+  --preserve-aspect-ratio \
+  --image-size 224 \
+  --batch-size 16 \
+  --epochs 12 \
+  --patience 3 \
+  --learning-rate 0.00002
+kaggle kernels push -p kaggle_kernel_dit_base_v1 --accelerator NvidiaTeslaT4 --timeout 7200
+```
+
+Argumen `--unfreeze-from` masih diperlukan antarmuka builder, tetapi untuk `dit_base` seluruh backbone dan head di-fine-tune; optimizer memakai learning rate backbone `2e-5` dan classifier `1e-4`. Kernel memasang `transformers==4.46.3` bila dependensi belum tersedia. Pantau dengan `kaggle kernels status muhammadkafanalkafi/document-classification-dit-base-v1` dan ambil output dengan `kaggle kernels output muhammadkafanalkafi/document-classification-dit-base-v1 -p kaggle_kernel_outputs/dit_base_v1`.
+
+Hasil run: validation accuracy `0.8903296359943759` pada epoch 11; public score submission `57788724` adalah `0.88749`, posisi #1 pada saat sinkronisasi 30 Oktober 2026. Submission dan hasil ini dicatat pada `reports/experiments/dit_base_v1.json`, `reports/submission_history.csv`, dan `submissions/`. Private score belum tersedia.
+
+Referensi model: [Microsoft DiT repository](https://github.com/microsoft/unilm/blob/master/dit/README.md), [DiT-base model card](https://huggingface.co/microsoft/dit-base).

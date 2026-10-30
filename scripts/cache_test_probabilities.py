@@ -61,7 +61,8 @@ def main():
     model.load_state_dict(checkpoint["model_state_dict"])
     model.eval()
     transform = build_image_transform(int(checkpoint["image_size"]),
-                                      preserve_aspect_ratio=bool(checkpoint.get("preserve_aspect_ratio", False)))
+                                      preserve_aspect_ratio=bool(checkpoint.get("preserve_aspect_ratio", False)),
+                                      normalization="dit" if checkpoint.get("architecture") == "dit_base" else "imagenet")
     dataset = DocumentImageDataset(metadata, args.data_dir, transform=transform, include_labels=False)
     expected = metadata["id"].astype(str).tolist()
     chunks = []

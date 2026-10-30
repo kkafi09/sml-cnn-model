@@ -16,7 +16,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("kaggle_kernel"))
     parser.add_argument("--epochs", type=int, default=12)
     parser.add_argument("--patience", type=int, default=3)
-    parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer3")
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--batch-size", type=int, default=32)
@@ -46,6 +46,11 @@ print(f"PyTorch: {torch.__version__}; CUDA available: {torch.cuda.is_available()
 if not torch.cuda.is_available():
     raise RuntimeError("This experiment requires a GPU; stopping before training")
 print(f"GPU: {torch.cuda.get_device_name(0)}", flush=True)
+if ARCHITECTURE == "dit_base":
+    try:
+        import transformers
+    except ImportError:
+        subprocess.run([sys.executable, "-m", "pip", "install", "transformers==4.46.3"], check=True)
 source = Path("/kaggle/working/sml_source")
 source.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(io.BytesIO(base64.b64decode(BUNDLE))) as archive:

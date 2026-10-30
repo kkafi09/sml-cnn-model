@@ -17,7 +17,8 @@ class PadToSquare:
 
 
 def build_image_transform(
-    image_size: int = 224, training: bool = False, preserve_aspect_ratio: bool = False
+    image_size: int = 224, training: bool = False, preserve_aspect_ratio: bool = False,
+    normalization: str = "imagenet",
 ):
     """Build a transform that resizes and normalizes scanned pages.
 
@@ -25,6 +26,7 @@ def build_image_transform(
         image_size: Height and width used by the model input.
         training: Add mild scan-style geometric and illumination augmentation.
         preserve_aspect_ratio: Pad pages to square before resizing, avoiding page distortion.
+        normalization: Either ``imagenet`` or ``dit`` normalization statistics.
 
     Returns:
         A torchvision composition converting PIL images to normalized tensors.
@@ -45,12 +47,19 @@ def build_image_transform(
                 transforms.ColorJitter(brightness=0.12, contrast=0.12),
             ]
         )
+    normalization_stats = {
+        "imagenet": ((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        "dit": ((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+    }
+    if normalization not in normalization_stats:
+        raise ValueError(f"Unsupported normalization: {normalization}")
+    mean, std = normalization_stats[normalization]
     operations.extend(
         [
             transforms.ToTensor(),
             transforms.Normalize(
-                mean=(0.485, 0.456, 0.406),
-                std=(0.229, 0.224, 0.225),
+                mean=mean,
+                std=std,
             ),
         ]
     )

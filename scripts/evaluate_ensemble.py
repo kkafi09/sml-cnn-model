@@ -48,6 +48,7 @@ def predict_probabilities(checkpoint_path, metadata, data_dir, device, batch_siz
     transform = build_image_transform(
         int(checkpoint["image_size"]),
         preserve_aspect_ratio=bool(checkpoint.get("preserve_aspect_ratio", False)),
+        normalization="dit" if checkpoint.get("architecture") == "dit_base" else "imagenet",
     )
     dataset = DocumentImageDataset(metadata, data_dir, transform=transform, include_labels=False)
     loader = DataLoader(dataset, batch_size=batch_size, shuffle=False, num_workers=workers,

@@ -1,0 +1,8 @@
+{
+  "checkpoint_sha256": "8db48d20a030dd606ec5f2fd7db2fbd7bd8de8dfd3d233117caa58f69a436e48",
+  "epoch": 11,
+  "validation_report_sha256": "870b6476bfb7422cbb3a94a33876cdefc7a826f2cf91a13e85dd8fa8e76a9ce8",
+  "submission_sha256": "f9299217f396b8e24e363b93812a65c36c3d8b029eb2eaa79edbc353347f48ca",
+  "validation_accuracy": 0.8903296359943759,
+  "model": "dit_base"
+}

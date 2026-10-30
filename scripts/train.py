@@ -22,7 +22,7 @@ from document_classifier.transforms import build_image_transform
 
 
 def run_epoch(
-    model, loader, criterion, device, optimizer=None
+    model, loader, criterion, device, optimizer=None, scaler=None
 ) -> tuple[float, float, list[str]]:
     """Run one training or validation epoch and return loss and accuracy.
 
@@ -52,11 +52,19 @@ def run_epoch(
             labels = labels.to(device, dtype=torch.long, non_blocking=True)
             if training:
                 optimizer.zero_grad(set_to_none=True)
-            logits = model(images)
-            loss = criterion(logits, labels)
+            with torch.autocast(
+                device_type=device.type, dtype=torch.float16, enabled=scaler is not None
+            ):
+                logits = model(images)
+                loss = criterion(logits, labels)
             if training:
-                loss.backward()
-                optimizer.step()
+                if scaler is not None:
+                    scaler.scale(loss).backward()
+                    scaler.step(optimizer)
+                    scaler.update()
+                else:
+                    loss.backward()
+                    optimizer.step()
             batch_size = labels.size(0)
             loss_sum += loss.item() * batch_size
             correct += (logits.argmax(dim=1) == labels).sum().item()
@@ -77,7 +85,7 @@ def main() -> None:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--architecture", choices=("resnet18", "resnet50"), default="resnet18")
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--label-smoothing", type=float, default=0.0)
@@ -104,13 +112,15 @@ def main() -> None:
         train_rows,
         args.data_dir,
         transform=build_image_transform(args.image_size, training=True,
-                                        preserve_aspect_ratio=args.preserve_aspect_ratio),
+                                        preserve_aspect_ratio=args.preserve_aspect_ratio,
+                                        normalization="dit" if args.architecture == "dit_base" else "imagenet"),
     )
     validation_dataset = DocumentImageDataset(
         validation_rows,
         args.data_dir,
         transform=build_image_transform(args.image_size,
-                                        preserve_aspect_ratio=args.preserve_aspect_ratio),
+                                        preserve_aspect_ratio=args.preserve_aspect_ratio,
+                                        normalization="dit" if args.architecture == "dit_base" else "imagenet"),
     )
     loader_options = {
         "batch_size": args.batch_size,
@@ -128,23 +138,33 @@ def main() -> None:
     )
 
     model = DocumentCNN(pretrained=True, architecture=args.architecture).to(device)
-    for parameter in model.backbone.parameters():
-        parameter.requires_grad = False
-    for parameter in model.backbone.layer4.parameters():
-        parameter.requires_grad = True
-    if args.unfreeze_from in {"layer2", "layer3"}:
-        for parameter in model.backbone.layer3.parameters():
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda") if args.architecture == "dit_base" else None
+    if args.architecture == "dit_base":
+        optimizer = torch.optim.AdamW(
+            [
+                {"params": model.backbone.beit.parameters(), "lr": args.learning_rate},
+                {"params": model.backbone.classifier.parameters(), "lr": args.learning_rate * 5},
+            ],
+            weight_decay=0.05,
+        )
+    else:
+        for parameter in model.backbone.parameters():
+            parameter.requires_grad = False
+        for parameter in model.backbone.layer4.parameters():
             parameter.requires_grad = True
-    if args.unfreeze_from == "layer2":
-        for parameter in model.backbone.layer2.parameters():
+        if args.unfreeze_from in {"layer2", "layer3"}:
+            for parameter in model.backbone.layer3.parameters():
+                parameter.requires_grad = True
+        if args.unfreeze_from == "layer2":
+            for parameter in model.backbone.layer2.parameters():
+                parameter.requires_grad = True
+        for parameter in model.backbone.fc.parameters():
             parameter.requires_grad = True
-    for parameter in model.backbone.fc.parameters():
-        parameter.requires_grad = True
-    optimizer = torch.optim.AdamW(
-        (parameter for parameter in model.parameters() if parameter.requires_grad),
-        lr=args.learning_rate,
-        weight_decay=1e-4,
-    )
+        optimizer = torch.optim.AdamW(
+            (parameter for parameter in model.parameters() if parameter.requires_grad),
+            lr=args.learning_rate,
+            weight_decay=1e-4,
+        )
     criterion = nn.CrossEntropyLoss(label_smoothing=args.label_smoothing)
     scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
         optimizer, mode="max", factor=0.5, patience=0
@@ -165,7 +185,7 @@ def main() -> None:
 
     for epoch in range(1, args.epochs + 1):
         train_loss, train_accuracy, train_corrupt = run_epoch(
-            model, train_loader, criterion, device, optimizer
+            model, train_loader, criterion, device, optimizer, scaler
         )
         validation_loss, validation_accuracy, validation_corrupt = run_epoch(
             model, validation_loader, criterion, device
@@ -202,7 +222,7 @@ def main() -> None:
                     "epoch": epoch,
                     "validation_accuracy": validation_accuracy,
                     "architecture": args.architecture,
-                    "unfreeze_from": args.unfreeze_from,
+                    "unfreeze_from": "all" if args.architecture == "dit_base" else args.unfreeze_from,
                     "learning_rate": args.learning_rate,
                     "label_smoothing": args.label_smoothing,
                     "preserve_aspect_ratio": args.preserve_aspect_ratio,
@@ -235,7 +255,11 @@ def main() -> None:
                 "validation_samples": len(validation_dataset),
                 "validation_samples_used": len(validation_dataset) - len(validation_corrupt_ids),
                 "device": str(device),
-                "model": f"{args.architecture} ImageNet initialization; {args.unfreeze_from} onward fine-tuned",
+                "model": (
+                    "DiT-base self-supervised document-image initialization; all layers fine-tuned"
+                    if args.architecture == "dit_base" else
+                    f"{args.architecture} ImageNet initialization; {args.unfreeze_from} onward fine-tuned"
+                ),
                 "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
                     "image_size": args.image_size, "learning_rate": args.learning_rate,
                     "label_smoothing": args.label_smoothing,

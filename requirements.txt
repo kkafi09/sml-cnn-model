@@ -7,3 +7,4 @@ scikit-learn
 matplotlib
 seaborn
 jupyter
+transformers>=4.46,<5
