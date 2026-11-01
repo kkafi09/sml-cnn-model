@@ -1,6 +1,6 @@
 {
   "experiment_id": "dit_large_v2",
-  "status": "RUNNING",
+  "status": "SUBMITTED_PENDING_SCORING",
   "kernel_ref": "muhammadkafanalkafi/document-classification-dit-large-v2",
   "architecture": "dit_large",
   "pretrained_weights": "microsoft/dit-large self-supervised IIT-CDIP; no RVL-CDIP supervised fine-tuning",
@@ -25,7 +25,7 @@
   "rank_2_public_score_at_last_check": 0.89711,
   "daily_submissions_remaining_at_last_check": 5,
   "submission_gate": "Submit only if this run or a verified ensemble beats 0.8903296359943759 validation and refreshed current rank-2 public score.",
-  "submission_ref": null,
+  "submission_ref": "57871182",
   "public_score": null,
   "observed_epochs": [
     {
@@ -89,7 +89,7 @@
       "train_loss": 0.5834,
       "train_accuracy": 0.9096,
       "validation_loss": 0.6448,
-      "validation_accuracy": 0.8985,
+      "validation_accuracy": 0.8984533666614591,
       "corrupt_images": 1
     }
   ],
@@ -105,14 +105,24 @@
     "total_batches": 3201,
     "train_loss": 0.5834,
     "train_accuracy": 0.9096,
-    "validation_accuracy": 0.8985,
-    "phase": "epoch_8_complete_output_pending"
+    "validation_accuracy": 0.8984533666614591,
+    "phase": "complete_submission_pending_score"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T16:45:00Z",
+    "checked_at_utc": "2026-11-01T12:13:01Z",
     "status": "RUNNING",
     "confirmed_accelerator": "Tesla T4"
   },
-  "best_validation_accuracy_observed": 0.8985,
-  "submission_gate_passed": true
+  "best_validation_accuracy_observed": 0.8984533666614591,
+  "submission_gate_passed": true,
+  "best_epoch": 8,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "train_samples_used": 25601,
+  "preserve_aspect_ratio": false,
+  "submission_csv": "submissions/dit_large_v2_44d3276e318d.csv",
+  "submission_sha256": "44d3276e318d3605575e39d9ec42fc2af7256dd30a9b9e0905fb16b34e90ac7d",
+  "private_score": null,
+  "submission_status": "PENDING",
+  "daily_submissions_remaining_after_submit": 3
 }
