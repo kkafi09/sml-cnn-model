@@ -47,7 +47,7 @@
     },
     {
       "version": 3,
-    "status": "RUNNING",
+      "status": "RUNNING",
       "transformers_version": "5.20.2",
       "image_size": 320,
       "batch_size": 4,
