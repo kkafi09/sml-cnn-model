@@ -41,14 +41,17 @@
   },
   "test_method_validation_grid": {
     "step": 0.01,
+    "dit_base": "softmax probabilities",
+    "donut_base": "one-hot class vote",
+    "resnet50_320": "one-hot class vote",
     "best_weights": {
-      "dit_base": 0.67,
-      "donut_base_one_hot": 0.14,
-      "resnet50_320": 0.19
+      "dit_base": 0.6,
+      "donut_base": 0.11,
+      "resnet50_320": 0.29
     },
-    "correct": 5744,
+    "correct": 5750,
     "samples": 6401,
-    "accuracy": 0.897359787533198
+    "accuracy": 0.8982971410717075
   },
   "prior_best_validation_accuracy": 0.8903296359943759,
   "rank_1_public_score_at_last_check": 0.90046,
@@ -60,5 +63,11 @@
   "public_score": null,
   "leaderboard_refresh_required_before_submit": true,
   "daily_submissions_remaining_at_last_check": 5,
-  "decision": "Proceed to test probability assembly using the hard-vote Donut method validated at 0.89735979; refresh leaderboard and daily allowance immediately before submission."
+  "decision": "Generate candidate using the validation-passing soft-DiT plus hard-vote method; refresh leaderboard and daily quota immediately before upload.",
+  "test_probability_cache_status": {
+    "dit_base": "in progress, test rows 0-800 cached",
+    "donut_base": "hard predictions already available",
+    "resnet50_320": "hard predictions already available"
+  },
+  "candidate_builder": "scripts/predict_ensemble_vote.py"
 }
