@@ -1,0 +1,38 @@
+{
+  "experiment_id": "ensemble_ditbase_donut_v1",
+  "status": "RUNNING",
+  "architecture": "weighted probability average of DiT-base and Donut-base",
+  "weights": {
+    "dit_base": 0.8,
+    "donut_base": 0.2
+  },
+  "validation_split": {
+    "strategy": "stratified train_test_split",
+    "seed": 42,
+    "size": 6401
+  },
+  "checkpoint_members": [
+    {
+      "path": "kaggle_kernel_outputs/dit_base_v1/checkpoint/best.pt",
+      "validation_accuracy": 0.8903296359943759
+    },
+    {
+      "path": "kaggle_kernel_outputs/donut_base_v1/checkpoint/best.pt",
+      "validation_accuracy": 0.8576784877362912
+    }
+  ],
+  "inference_device": "cpu",
+  "batch_size": 16,
+  "cache_dir": "kaggle_kernel_outputs/ensemble_cache",
+  "minimum_validation_to_generate_test_predictions": 1.0,
+  "test_predicted": false,
+  "submission_ref": null,
+  "public_score": null,
+  "submission_gate": "Any candidate must exceed prior best validation 0.8903296359943759 and refreshed rank-2 public score 0.89711.",
+  "daily_submissions_remaining_at_last_check": 5,
+  "progress": {
+    "donut_validation_batches": 70,
+    "total_batches": 401
+  },
+  "decision": "No submission unless the ensemble crosses both validation gates."
+}
