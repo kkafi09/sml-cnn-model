@@ -14,7 +14,7 @@ class DocumentCNN(nn.Module):
         Args:
             num_classes: Number of document categories to predict.
             pretrained: Start from ImageNet weights when true.
-            architecture: ``resnet18``, ``resnet50``, or ``dit_base``.
+            architecture: ``resnet18``, ``resnet50``, ``dit_base``, or ``dit_large``.
         """
         super().__init__()
         self.architecture = architecture
@@ -24,19 +24,20 @@ class DocumentCNN(nn.Module):
         elif architecture == "resnet50":
             weights = ResNet50_Weights.DEFAULT if pretrained else None
             self.backbone = resnet50(weights=weights)
-        elif architecture == "dit_base":
+        elif architecture in {"dit_base", "dit_large"}:
             try:
                 from transformers import BeitConfig, BeitForImageClassification
             except ImportError as error:
                 raise ImportError("Install transformers to use the DiT-base model") from error
             if pretrained:
                 self.backbone = BeitForImageClassification.from_pretrained(
-                    "microsoft/dit-base",
+                    "microsoft/dit-large" if architecture == "dit_large" else "microsoft/dit-base",
                     num_labels=num_classes,
                     ignore_mismatched_sizes=True,
                 )
             else:
-                config = BeitConfig.from_pretrained("microsoft/dit-base")
+                model_name = "microsoft/dit-large" if architecture == "dit_large" else "microsoft/dit-base"
+                config = BeitConfig.from_pretrained(model_name)
                 config.num_labels = num_classes
                 config.id2label = {index: str(index) for index in range(num_classes)}
                 config.label2id = {str(index): index for index in range(num_classes)}
@@ -49,6 +50,6 @@ class DocumentCNN(nn.Module):
 
     def forward(self, images):
         """Compute unnormalized class scores for a batch of RGB images."""
-        if self.architecture == "dit_base":
+        if self.architecture in {"dit_base", "dit_large"}:
             return self.backbone(pixel_values=images).logits
         return self.backbone(images)

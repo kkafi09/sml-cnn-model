@@ -85,7 +85,7 @@ def main() -> None:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base"), default="resnet18")
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base", "dit_large"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--label-smoothing", type=float, default=0.0)
@@ -113,14 +113,14 @@ def main() -> None:
         args.data_dir,
         transform=build_image_transform(args.image_size, training=True,
                                         preserve_aspect_ratio=args.preserve_aspect_ratio,
-                                        normalization="dit" if args.architecture == "dit_base" else "imagenet"),
+                                        normalization="dit" if args.architecture.startswith("dit_") else "imagenet"),
     )
     validation_dataset = DocumentImageDataset(
         validation_rows,
         args.data_dir,
         transform=build_image_transform(args.image_size,
                                         preserve_aspect_ratio=args.preserve_aspect_ratio,
-                                        normalization="dit" if args.architecture == "dit_base" else "imagenet"),
+                                        normalization="dit" if args.architecture.startswith("dit_") else "imagenet"),
     )
     loader_options = {
         "batch_size": args.batch_size,
@@ -138,8 +138,11 @@ def main() -> None:
     )
 
     model = DocumentCNN(pretrained=True, architecture=args.architecture).to(device)
-    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda") if args.architecture == "dit_base" else None
-    if args.architecture == "dit_base":
+    is_dit = args.architecture.startswith("dit_")
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda") if is_dit else None
+    if is_dit:
+        if args.architecture == "dit_large":
+            model.backbone.gradient_checkpointing_enable()
         optimizer = torch.optim.AdamW(
             [
                 {"params": model.backbone.beit.parameters(), "lr": args.learning_rate},
@@ -222,7 +225,7 @@ def main() -> None:
                     "epoch": epoch,
                     "validation_accuracy": validation_accuracy,
                     "architecture": args.architecture,
-                    "unfreeze_from": "all" if args.architecture == "dit_base" else args.unfreeze_from,
+                    "unfreeze_from": "all" if is_dit else args.unfreeze_from,
                     "learning_rate": args.learning_rate,
                     "label_smoothing": args.label_smoothing,
                     "preserve_aspect_ratio": args.preserve_aspect_ratio,
@@ -256,16 +259,17 @@ def main() -> None:
                 "validation_samples_used": len(validation_dataset) - len(validation_corrupt_ids),
                 "device": str(device),
                 "model": (
-                    "DiT-base self-supervised document-image initialization; all layers fine-tuned"
-                    if args.architecture == "dit_base" else
+                    f"{args.architecture.replace('_', '-')} self-supervised document-image initialization; all layers fine-tuned"
+                    if is_dit else
                     f"{args.architecture} ImageNet initialization; {args.unfreeze_from} onward fine-tuned"
                 ),
                 "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
                     "image_size": args.image_size, "learning_rate": args.learning_rate,
                     "label_smoothing": args.label_smoothing,
-                    "unfreeze_from": args.unfreeze_from, "patience": args.patience,
+                    "unfreeze_from": "all" if is_dit else args.unfreeze_from, "patience": args.patience,
                     "architecture": args.architecture,
-                    "preserve_aspect_ratio": args.preserve_aspect_ratio},
+                    "preserve_aspect_ratio": args.preserve_aspect_ratio,
+                    "gradient_checkpointing": args.architecture == "dit_large"},
                 "corrupt_image_count": len(corrupt_ids),
                 "corrupt_image_ids": sorted(corrupt_ids),
                 "corrupt_train_image_ids": sorted(train_corrupt_ids),

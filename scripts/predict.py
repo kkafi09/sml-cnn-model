@@ -35,7 +35,7 @@ def main() -> None:
         args.data_dir,
         transform=build_image_transform(
             image_size, preserve_aspect_ratio=bool(checkpoint.get("preserve_aspect_ratio", False)),
-            normalization="dit" if checkpoint.get("architecture") == "dit_base" else "imagenet",
+            normalization="dit" if checkpoint.get("architecture", "").startswith("dit_") else "imagenet",
         ),
         include_labels=False,
     )

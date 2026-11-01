@@ -298,3 +298,12 @@ Argumen `--unfreeze-from` masih diperlukan antarmuka builder, tetapi untuk `dit_
 Hasil run: validation accuracy `0.8903296359943759` pada epoch 11; public score submission `57788724` adalah `0.88749`, posisi #1 pada saat sinkronisasi 30 Oktober 2026. Submission dan hasil ini dicatat pada `reports/experiments/dit_base_v1.json`, `reports/submission_history.csv`, dan `submissions/`. Private score belum tersedia.
 
 Referensi model: [Microsoft DiT repository](https://github.com/microsoft/unilm/blob/master/dit/README.md), [DiT-base model card](https://huggingface.co/microsoft/dit-base).
+
+
+## DiT-large dan ambang submission relatif leaderboard
+
+DiT-large (`microsoft/dit-large`) adalah kandidat pretrained self-supervised pada IIT-CDIP dengan 304M parameter. Microsoft melaporkan 92,69% pada RVL-CDIP penuh dibandingkan 92,11% untuk DiT-base; ini bukan estimasi skor untuk split kompetisi yang sedang kita gunakan. Jalankan dengan AMP dan gradient checkpointing pada GPU terbatas. Referensi resmi: [Microsoft DiT](https://github.com/microsoft/unilm/blob/master/dit/README.md), [kartu model DiT-large](https://huggingface.co/microsoft/dit-large).
+
+Ambang validation harus dibandingkan di split seed 42 yang sama. `scripts/submit_candidate.py --minimum-validation <skor-publik-rank-2-terkini>` menambah gate konservatif di atas syarat mengalahkan semua validation model sebelumnya. Public score dan validation accuracy berasal dari sampel berbeda, jadi lolosnya gate bukan jaminan posisi; cek leaderboard dan kuota sekali lagi sebelum submit. Catat skor/rank yang digunakan di laporan eksperimen.
+
+Run DiT-large v1 saat ini: kernel `muhammadkafanalkafi/document-classification-dit-large-v1`, T4 diminta, 224px, batch 8, 8 epoch maksimum, learning rate `1e-5`, label smoothing `0.05`, seed 42, gradient checkpointing aktif. Lihat laporan live `reports/experiments/dit_large_v1.json`; jangan submit sebelum status complete, checkpoint/prediksi tervalidasi, dan syarat score terpenuhi.

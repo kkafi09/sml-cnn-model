@@ -124,6 +124,8 @@ def main() -> None:
     parser.add_argument("--sync-only", action="store_true", help="Update scores without submitting")
     parser.add_argument("--ensemble", action="store_true", help="Validate an ensemble evaluation directory")
     parser.add_argument("--dry-run", action="store_true", help="Validate the candidate without submitting")
+    parser.add_argument("--minimum-validation", type=float, default=THRESHOLD,
+                        help="Additional validation-accuracy gate, e.g. current public #2 score")
     args = parser.parse_args()
     rows = kaggle_submissions()
     sync_history(rows, args.history)
@@ -153,8 +155,9 @@ def main() -> None:
     candidate = args.experiment_dir / "submission.csv"
     report = json.loads(report_path.read_text())
     score = float(report["best_validation_accuracy"])
-    if not math.isfinite(score) or not THRESHOLD < score <= 1:
-        raise ValueError(f"Validation accuracy {score} must be above {THRESHOLD:.2f}")
+    threshold = max(THRESHOLD, args.minimum_validation)
+    if not math.isfinite(score) or not math.isfinite(threshold) or not threshold < score <= 1:
+        raise ValueError(f"Validation accuracy {score} must be above {threshold:.5f}")
     experiment_id = args.experiment_dir.name
     previous_scores = [float(row["validation_accuracy"]) for row in rows
                        if row.get("validation_accuracy") not in (None, "")]
@@ -186,7 +189,7 @@ def main() -> None:
             checkpoint = torch.load(path, map_location="cpu", weights_only=True)
             architecture = checkpoint.get("architecture")
             if (checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16
-                    or architecture not in {"resnet18", "resnet50", "dit_base"}
+                    or architecture not in {"resnet18", "resnet50", "dit_base", "dit_large"}
                     or int(checkpoint["epoch"]) != int(member["epoch"])
                     or int(checkpoint["image_size"]) != int(member["image_size"])
                     or abs(float(checkpoint["validation_accuracy"]) - float(member["validation_accuracy"])) > 2 / 6401):
@@ -247,7 +250,7 @@ def main() -> None:
         raise RuntimeError("Submit returned without a ref; inspect Kaggle before retrying")
     config = configuration
     pretrained_weights = (
-        "DiT-base self-supervised IIT-CDIP" if "dit_base" in model else "ImageNet"
+        f"{model.replace('_', '-')} self-supervised IIT-CDIP" if model.startswith("dit_") else "ImageNet"
     )
     record = {"submission_ref": match.group(1), "submitted_at_utc": datetime.now(timezone.utc).isoformat(),
               "competition": COMPETITION, "model": model, "pretrained_weights": pretrained_weights,

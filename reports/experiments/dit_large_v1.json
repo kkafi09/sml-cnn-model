@@ -1,0 +1,50 @@
+{
+  "experiment_id": "dit_large_v1",
+  "status": "RUNNING",
+  "kernel_ref": "muhammadkafanalkafi/document-classification-dit-large-v1",
+  "kernel_version": 1,
+  "architecture": "dit_large",
+  "pretrained_weights": "microsoft/dit-large self-supervised IIT-CDIP",
+  "pretrained_label_finetuning": false,
+  "requested_accelerator": "NvidiaTeslaT4",
+  "requested_kernel_status": "RUNNING",
+  "image_size": 224,
+  "batch_size": 8,
+  "learning_rate_backbone": 1e-05,
+  "learning_rate_classifier": 5e-05,
+  "optimizer": "AdamW",
+  "label_smoothing": 0.05,
+  "seed": 42,
+  "validation_split": 0.2,
+  "max_epochs": 8,
+  "early_stopping_patience": 2,
+  "gradient_checkpointing": true,
+  "normalization": {
+    "mean": [
+      0.5,
+      0.5,
+      0.5
+    ],
+    "std": [
+      0.5,
+      0.5,
+      0.5
+    ]
+  },
+  "leaderboard_at_launch": {
+    "rank_1": 0.90046,
+    "rank_2": 0.89711,
+    "rank_3": 0.89209,
+    "our_rank": 4,
+    "our_public_score": 0.88749
+  },
+  "submission_gate": "Submit only if validation accuracy is greater than both the current best validation score and current public rank-2 score; refresh leaderboard and daily allowance immediately before sending.",
+  "daily_submissions_used_at_launch": 0,
+  "daily_submissions_remaining_at_launch": 5,
+  "observed_epochs": [],
+  "best_epoch_observed": null,
+  "best_validation_accuracy_observed": null,
+  "test_prediction_rows": null,
+  "checkpoint_recovered": false,
+  "submission_decision": "Training kernel submitted; waiting for training and validation results."
+}
