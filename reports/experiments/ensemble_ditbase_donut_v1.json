@@ -31,7 +31,7 @@
   "submission_gate": "Any candidate must exceed prior best validation 0.8903296359943759 and refreshed rank-2 public score 0.89711.",
   "daily_submissions_remaining_at_last_check": 5,
   "progress": {
-    "donut_validation_batches": 310,
+    "donut_validation_batches": 330,
     "total_batches": 401
   },
   "decision": "No submission unless the ensemble crosses both validation gates."
