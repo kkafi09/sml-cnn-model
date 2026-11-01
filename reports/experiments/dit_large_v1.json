@@ -48,13 +48,20 @@
       "train_accuracy": 0.6605,
       "validation_loss": 0.844,
       "validation_accuracy": 0.8292
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.8872,
+      "train_accuracy": 0.8144,
+      "validation_loss": 0.7466,
+      "validation_accuracy": 0.8566
     }
   ],
-  "best_epoch_observed": 1,
-  "best_validation_accuracy_observed": 0.8292,
+  "best_epoch_observed": 2,
+  "best_validation_accuracy_observed": 0.8566,
   "test_prediction_rows": null,
   "checkpoint_recovered": false,
-  "submission_decision": "No submission: epoch 1 validation 0.8292 is below the previous best 0.89033 and public rank-2 snapshot 0.89711.",
+  "submission_decision": "No submission: best observed validation 0.8566 remains below DiT-base best 0.89033 and public rank-2 snapshot 0.89711.",
   "confirmed_accelerator": "Tesla T4",
   "cuda_available": true
 }
