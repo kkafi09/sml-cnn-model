@@ -60,8 +60,17 @@
   "public_score": null,
   "requested_kernel_status": "RUNNING",
   "kernel_version": 3,
-  "observed_epochs": [],
-  "best_validation_accuracy_observed": null,
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.4767,
+      "train_accuracy": 0.5974,
+      "validation_loss": 1.1192,
+      "validation_accuracy": 0.7211,
+      "corrupt_images": 1
+    }
+  ],
+  "best_validation_accuracy_observed": 0.7211,
   "observed_batches": [
     {
       "batch": 100,
@@ -80,10 +89,11 @@
     }
   ],
   "latest_training_progress": {
-    "batch": 6400,
+    "epoch": 2,
+    "batch": 900,
     "total_batches": 6401,
-    "train_loss": 1.4767,
-    "train_accuracy": 0.5974,
-    "phase": "epoch_1_training_complete; awaiting validation metrics"
+    "train_loss": 1.0703,
+    "train_accuracy": 0.7503,
+    "phase": "epoch_2_training"
   }
 }
