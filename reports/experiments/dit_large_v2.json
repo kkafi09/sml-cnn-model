@@ -76,16 +76,15 @@
   "training_started": true,
   "requested_kernel_status": "RUNNING",
   "latest_training_progress": {
-    "epoch": 5,
-    "batch": 3201,
+    "epoch": 6,
+    "batch": 1400,
     "total_batches": 3201,
-    "train_loss": 0.671,
-    "train_accuracy": 0.8808,
-    "validation_accuracy": 0.8858,
-    "phase": "epoch_5_complete"
+    "train_loss": 0.6367,
+    "train_accuracy": 0.8918,
+    "phase": "epoch_6_training"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T11:45:00Z",
+    "checked_at_utc": "2026-11-01T12:10:00Z",
     "status": "RUNNING",
     "confirmed_accelerator": "Tesla T4"
   },
