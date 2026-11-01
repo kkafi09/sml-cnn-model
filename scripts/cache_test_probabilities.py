@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np
 import torch
 import torchvision
+import transformers
 from PIL import __version__ as pillow_version
 from torch.utils.data import DataLoader, Subset
 
@@ -42,7 +43,8 @@ def main():
     key = hashlib.sha256()
     for payload in (args.checkpoint.read_bytes(), metadata[["id", "filename"]].to_csv(index=False).encode(),
                     str(args.data_dir.resolve()).encode(), str(device).encode(),
-                    torch.__version__.encode(), torchvision.__version__.encode(), pillow_version.encode(),
+                    torch.__version__.encode(), torchvision.__version__.encode(),
+                    transformers.__version__.encode(), pillow_version.encode(),
                     Path(evaluate_ensemble.__file__).read_bytes(),
                     *(root.joinpath("src/document_classifier", name).read_bytes()
                       for name in ("data.py", "model.py", "transforms.py"))):

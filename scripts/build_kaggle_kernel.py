@@ -3,6 +3,7 @@
 import argparse
 import base64
 import io
+import importlib.metadata
 import json
 from pathlib import Path
 import zipfile
@@ -47,10 +48,20 @@ if not torch.cuda.is_available():
     raise RuntimeError("This experiment requires a GPU; stopping before training")
 print(f"GPU: {torch.cuda.get_device_name(0)}", flush=True)
 if ARCHITECTURE.startswith("dit_") or ARCHITECTURE == "donut_base":
+    required_version = "5.20.2"
     try:
-        import transformers
-    except ImportError:
-        subprocess.run([sys.executable, "-m", "pip", "install", "transformers==4.46.3"], check=True)
+        installed_version = importlib.metadata.version("transformers")
+    except importlib.metadata.PackageNotFoundError:
+        installed_version = None
+    if installed_version != required_version:
+        subprocess.run(
+            [sys.executable, "-m", "pip", "install", "--upgrade", f"transformers=={required_version}"],
+            check=True,
+        )
+    import transformers
+    print(f"Transformers: {transformers.__version__}", flush=True)
+    if transformers.__version__ != required_version:
+        raise RuntimeError(f"Expected transformers=={required_version}; found {transformers.__version__}")
 source = Path("/kaggle/working/sml_source")
 source.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(io.BytesIO(base64.b64decode(BUNDLE))) as archive:

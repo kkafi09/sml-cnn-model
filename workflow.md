@@ -293,7 +293,7 @@ Untuk membangun ulang staging kernel dari repository:
 kaggle kernels push -p kaggle_kernel_dit_base_v1 --accelerator NvidiaTeslaT4 --timeout 7200
 ```
 
-Argumen `--unfreeze-from` masih diperlukan antarmuka builder, tetapi untuk `dit_base` seluruh backbone dan head di-fine-tune; optimizer memakai learning rate backbone `2e-5` dan classifier `1e-4`. Kernel memasang `transformers==4.46.3` bila dependensi belum tersedia. Pantau dengan `kaggle kernels status muhammadkafanalkafi/document-classification-dit-base-v1` dan ambil output dengan `kaggle kernels output muhammadkafanalkafi/document-classification-dit-base-v1 -p kaggle_kernel_outputs/dit_base_v1`.
+Argumen `--unfreeze-from` masih diperlukan antarmuka builder, tetapi untuk `dit_base` seluruh backbone dan head di-fine-tune; optimizer memakai learning rate backbone `2e-5` dan classifier `1e-4`. Pipeline mengunci Transformers ke `5.20.2`, karena checkpoint DiT dari versi ini memakai penamaan layer yang berbeda dengan versi 4.x. Pantau dengan `kaggle kernels status muhammadkafanalkafi/document-classification-dit-base-v1` dan ambil output dengan `kaggle kernels output muhammadkafanalkafi/document-classification-dit-base-v1 -p kaggle_kernel_outputs/dit_base_v1`.
 
 Hasil run: validation accuracy `0.8903296359943759` pada epoch 11; public score submission `57788724` adalah `0.88749`, posisi #1 pada saat sinkronisasi 30 Oktober 2026. Submission dan hasil ini dicatat pada `reports/experiments/dit_base_v1.json`, `reports/submission_history.csv`, dan `submissions/`. Private score belum tersedia.
 
