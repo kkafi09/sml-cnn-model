@@ -57,7 +57,7 @@
     }
   ],
   "submission_ref": "57871671",
-  "public_score": null,
+  "public_score": 0.85654,
   "requested_kernel_status": "COMPLETE",
   "kernel_version": 3,
   "observed_epochs": [
@@ -158,16 +158,17 @@
     "observed_epoch_8_validation_accuracy": 0.8577,
     "best_validation_accuracy": 0.8577
   },
-  "submission_decision": "Submitted per user instruction despite validation 0.8576785 being below prior best 0.8903296 and rank-2 gate 0.89711.",
+  "submission_decision": "Public score 0.85654 recorded; submission did not affect rank-2 standing, which remains held by DiT-large v2 at 0.89753.",
   "test_prediction_generated": true,
   "test_prediction_artifact": "kaggle_kernel_outputs/donut_base_v1/submission.csv",
   "test_prediction_sha256": "404c35828d74540af0d4c5c382646e807011b7e078a6b082c00aeea001c495e4",
   "submitted": true,
   "checkpoint_recovered": true,
   "checkpoint_path": "kaggle_kernel_outputs/donut_base_v1/checkpoint/best.pt",
-  "submission_status": "PENDING",
+  "submission_status": "COMPLETE",
   "private_score": null,
   "submission_artifact": "submissions/donut_base_v1_404c35828d74.csv",
   "submission_sha256": "404c35828d74540af0d4c5c382646e807011b7e078a6b082c00aeea001c495e4",
-  "daily_submissions_remaining_after_submit": 2
+  "daily_submissions_remaining_after_submit": 2,
+  "leaderboard_rank_after_submission": null
 }
