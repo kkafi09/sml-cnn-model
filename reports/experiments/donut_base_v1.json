@@ -1,6 +1,6 @@
 {
   "experiment_id": "donut_base_v1",
-  "status": "TRAINING_COMPLETE_PREDICTING_TEST",
+  "status": "COMPLETE",
   "kernel_ref": "muhammadkafanalkafi/document-classification-donut-base-v1",
   "architecture": "donut_base",
   "pretrained_weights": "naver-clova-ix/donut-base self-supervised IIT-CDIP+SynthDoG; encoder only",
@@ -58,7 +58,7 @@
   ],
   "submission_ref": null,
   "public_score": null,
-  "requested_kernel_status": "RUNNING",
+  "requested_kernel_status": "COMPLETE",
   "kernel_version": 3,
   "observed_epochs": [
     {
@@ -158,5 +158,11 @@
     "observed_epoch_8_validation_accuracy": 0.8577,
     "best_validation_accuracy": 0.8577
   },
-  "submission_decision": "No submission: best validation 0.8577 is below previous best 0.8903296359943759 and public rank-2 0.89711."
+  "submission_decision": "Not submitted: validation best 0.8576785 is below prior best validation 0.8903296 and rank-2 public score 0.89711.",
+  "test_prediction_generated": true,
+  "test_prediction_artifact": "kaggle_kernel_outputs/donut_base_v1/submission.csv",
+  "test_prediction_sha256": "404c35828d74540af0d4c5c382646e807011b7e078a6b082c00aeea001c495e4",
+  "submitted": false,
+  "checkpoint_recovered": true,
+  "checkpoint_path": "kaggle_kernel_outputs/donut_base_v1/checkpoint/best.pt"
 }
