@@ -24,8 +24,10 @@
   "transformers_version": "5.20.2",
   "timeout_seconds": 21600,
   "leaderboard_at_last_check": {
-    "status": "UNAVAILABLE_403",
-    "last_known_rank_2_score": 0.89711
+    "status": "AVAILABLE",
+    "checked_at_utc": "2026-11-01T05:26:52Z",
+    "rank_1_score": 0.90046,
+    "rank_2_score": 0.89711
   },
   "submission_gate": "Validation must exceed both previous best validation 0.8903296359943759 and refreshed current rank-2 public score; refresh leaderboard and daily allowance before upload.",
   "daily_submissions_remaining_at_last_check": 5,
@@ -45,7 +47,7 @@
     },
     {
       "version": 3,
-      "status": "RUNNING",
+    "status": "RUNNING",
       "transformers_version": "5.20.2",
       "image_size": 320,
       "batch_size": 4,
@@ -78,9 +80,10 @@
     }
   ],
   "latest_training_progress": {
-    "batch": 5600,
+    "batch": 6400,
     "total_batches": 6401,
-    "train_loss": 1.518,
-    "train_accuracy": 0.5825
+    "train_loss": 1.4767,
+    "train_accuracy": 0.5974,
+    "phase": "epoch_1_training_complete; awaiting validation metrics"
   }
 }
