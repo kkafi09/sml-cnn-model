@@ -76,9 +76,17 @@
       "validation_loss": 0.9407,
       "validation_accuracy": 0.7866,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.8705,
+      "train_accuracy": 0.8146,
+      "validation_loss": 0.8628,
+      "validation_accuracy": 0.816,
+      "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy_observed": 0.7866,
+  "best_validation_accuracy_observed": 0.816,
   "observed_batches": [
     {
       "batch": 100,
@@ -98,15 +106,15 @@
   ],
   "latest_training_progress": {
     "epoch": 3,
-    "batch": 6100,
+    "batch": 6400,
     "total_batches": 6401,
-    "train_loss": 0.8704,
-    "train_accuracy": 0.8142,
-    "phase": "epoch_3_training"
+    "train_loss": 0.8705,
+    "train_accuracy": 0.8146,
+    "phase": "epoch_3_training_complete; validation 0.8160; waiting for epoch_4 logs"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T06:16:00Z",
+    "checked_at_utc": "2026-11-01T06:19:00Z",
     "status": "RUNNING",
-    "observed_epoch_2_validation_accuracy": 0.7866
+    "observed_epoch_3_validation_accuracy": 0.816
   }
 }
