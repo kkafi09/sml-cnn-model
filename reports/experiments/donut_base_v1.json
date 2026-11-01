@@ -114,16 +114,16 @@
   ],
   "latest_training_progress": {
     "epoch": 5,
-    "batch": 1300,
+    "batch": 3000,
     "total_batches": 6401,
-    "train_loss": 0.7085,
-    "train_accuracy": 0.8682,
+    "train_loss": 0.7089,
+    "train_accuracy": 0.8701,
     "phase": "epoch_5_training"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T06:50:00Z",
+    "checked_at_utc": "2026-11-01T07:00:00Z",
     "status": "RUNNING",
-    "epoch_5_batch": 1300,
-    "train_accuracy": 0.8682
+    "epoch_5_batch": 3000,
+    "train_accuracy": 0.8701
   }
 }
