@@ -33,7 +33,7 @@ def main() -> None:
             path = root / "scripts" / filename
             bundle.write(path, path.relative_to(root))
     encoded = base64.b64encode(archive.getvalue()).decode("ascii")
-    runner = '''"""Train a ResNet model and generate a competition prediction file."""
+    runner = '''"""Train the selected model and generate a competition prediction file."""
 import base64
 import io
 from pathlib import Path

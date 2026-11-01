@@ -41,10 +41,20 @@
   "submission_gate": "Submit only if validation accuracy is greater than both the current best validation score and current public rank-2 score; refresh leaderboard and daily allowance immediately before sending.",
   "daily_submissions_used_at_launch": 0,
   "daily_submissions_remaining_at_launch": 5,
-  "observed_epochs": [],
-  "best_epoch_observed": null,
-  "best_validation_accuracy_observed": null,
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.3295,
+      "train_accuracy": 0.6605,
+      "validation_loss": 0.844,
+      "validation_accuracy": 0.8292
+    }
+  ],
+  "best_epoch_observed": 1,
+  "best_validation_accuracy_observed": 0.8292,
   "test_prediction_rows": null,
   "checkpoint_recovered": false,
-  "submission_decision": "Training kernel submitted; waiting for training and validation results."
+  "submission_decision": "No submission: epoch 1 validation 0.8292 is below the previous best 0.89033 and public rank-2 snapshot 0.89711.",
+  "confirmed_accelerator": "Tesla T4",
+  "cuda_available": true
 }

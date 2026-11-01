@@ -1,4 +1,4 @@
-"""Train a reproducible ResNet model and select by validation accuracy."""
+"""Train a reproducible neural network and select by validation accuracy."""
 
 import argparse
 import csv
