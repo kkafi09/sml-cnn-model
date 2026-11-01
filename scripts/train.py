@@ -22,7 +22,7 @@ from document_classifier.transforms import build_image_transform
 
 
 def run_epoch(
-    model, loader, criterion, device, optimizer=None, scaler=None
+    model, loader, criterion, device, optimizer=None, scaler=None, amp=False
 ) -> tuple[float, float, list[str]]:
     """Run one training or validation epoch and return loss and accuracy.
 
@@ -33,6 +33,7 @@ def run_epoch(
         device: CPU or CUDA device used for computation.
         optimizer: Optimizer for training; omit it for validation.
         scaler: Mixed-precision gradient scaler, if enabled.
+        amp: Enable autocast during validation without enabling gradients.
 
     Returns:
         Mean loss, categorical accuracy, and IDs of unreadable images.
@@ -54,7 +55,9 @@ def run_epoch(
             if training:
                 optimizer.zero_grad(set_to_none=True)
             with torch.autocast(
-                device_type=device.type, dtype=torch.float16, enabled=scaler is not None
+                device_type=device.type,
+                dtype=torch.float16,
+                enabled=scaler is not None or (amp and device.type == "cuda"),
             ):
                 logits = model(images)
                 loss = criterion(logits, labels)
@@ -70,9 +73,11 @@ def run_epoch(
             loss_sum += loss.item() * batch_size
             correct += (logits.argmax(dim=1) == labels).sum().item()
             sample_count += batch_size
-            if training and scaler is not None and batch_index % 100 == 0:
+            progress_interval = 100 if training else 200
+            if (scaler is not None or not training) and batch_index % progress_interval == 0:
+                phase = "train_batch" if training else "validation_batch"
                 print(
-                    f"train_batch {batch_index}/{len(loader)}: "
+                    f"{phase} {batch_index}/{len(loader)}: "
                     f"loss={loss_sum / sample_count:.4f} "
                     f"accuracy={correct / sample_count:.4f}",
                     flush=True,
@@ -210,7 +215,11 @@ def main() -> None:
             model, train_loader, criterion, device, optimizer, scaler
         )
         validation_loss, validation_accuracy, validation_corrupt = run_epoch(
-            model, validation_loader, criterion, device
+            model,
+            validation_loader,
+            criterion,
+            device,
+            amp=is_document_transformer,
         )
         train_corrupt_ids.update(train_corrupt)
         validation_corrupt_ids.update(validation_corrupt)
