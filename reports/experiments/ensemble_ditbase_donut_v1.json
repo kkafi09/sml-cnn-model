@@ -1,6 +1,6 @@
 {
   "experiment_id": "ensemble_ditbase_donut_v1",
-  "status": "RUNNING",
+  "status": "COMPLETE",
   "architecture": "weighted probability average of DiT-base and Donut-base",
   "weights": {
     "dit_base": 0.8,
@@ -31,8 +31,9 @@
   "submission_gate": "Any candidate must exceed prior best validation 0.8903296359943759 and refreshed rank-2 public score 0.89711.",
   "daily_submissions_remaining_at_last_check": 5,
   "progress": {
-    "donut_validation_batches": 350,
+    "donut_validation_batches": 401,
     "total_batches": 401
   },
-  "decision": "No submission unless the ensemble crosses both validation gates."
+  "decision": "Below rank-2 public gate 0.89711; use Donut as a hard-vote member in a three-model candidate instead.",
+  "validation_accuracy": 0.8939228245586627
 }

@@ -1,0 +1,64 @@
+{
+  "experiment_id": "ensemble_ditbase_donut_resnet50_320_v1",
+  "status": "VALIDATION_GATE_PASSED_TEST_PREDICTION_PENDING",
+  "validation_split": {
+    "strategy": "stratified train_test_split",
+    "seed": 42,
+    "size": 6401
+  },
+  "models": [
+    {
+      "name": "dit_base",
+      "checkpoint": "kaggle_kernel_outputs/dit_base_v1/checkpoint/best.pt",
+      "validation_accuracy": 0.8903296359943759
+    },
+    {
+      "name": "donut_base",
+      "checkpoint": "kaggle_kernel_outputs/donut_base_v1/checkpoint/best.pt",
+      "validation_accuracy": 0.8576784877362912
+    },
+    {
+      "name": "resnet50_320",
+      "checkpoint": "kaggle_kernel_outputs/resnet50_layer2_320_v1/checkpoint/best.pt",
+      "validation_accuracy": 0.8642399625058584
+    }
+  ],
+  "soft_probability_grid": {
+    "step": 0.01,
+    "best_weights": {
+      "dit_base": 0.61,
+      "donut_base": 0.16,
+      "resnet50_320": 0.23
+    },
+    "correct": 5745,
+    "samples": 6401,
+    "accuracy": 0.8975160131229495
+  },
+  "test_ensemble_method": {
+    "dit_base": "softmax probabilities",
+    "donut_base": "one-hot vector from the generated test class predictions",
+    "resnet50_320": "softmax probabilities"
+  },
+  "test_method_validation_grid": {
+    "step": 0.01,
+    "best_weights": {
+      "dit_base": 0.67,
+      "donut_base_one_hot": 0.14,
+      "resnet50_320": 0.19
+    },
+    "correct": 5744,
+    "samples": 6401,
+    "accuracy": 0.897359787533198
+  },
+  "prior_best_validation_accuracy": 0.8903296359943759,
+  "rank_1_public_score_at_last_check": 0.90046,
+  "rank_2_public_score_at_last_check": 0.89711,
+  "submission_gate_passed": true,
+  "test_predicted": false,
+  "submission_csv": null,
+  "submission_ref": null,
+  "public_score": null,
+  "leaderboard_refresh_required_before_submit": true,
+  "daily_submissions_remaining_at_last_check": 5,
+  "decision": "Proceed to test probability assembly using the hard-vote Donut method validated at 0.89735979; refresh leaderboard and daily allowance immediately before submission."
+}
