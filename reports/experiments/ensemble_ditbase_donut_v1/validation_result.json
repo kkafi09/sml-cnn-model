@@ -1,0 +1,28 @@
+{
+  "model": "weighted probability ensemble",
+  "seed": 42,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "best_validation_accuracy": 0.8939228245586627,
+  "checkpoints": [
+    {
+      "path": "kaggle_kernel_outputs/dit_base_v1/checkpoint/best.pt",
+      "sha256": "8db48d20a030dd606ec5f2fd7db2fbd7bd8de8dfd3d233117caa58f69a436e48",
+      "weight": 0.8,
+      "epoch": 11,
+      "image_size": 224,
+      "validation_accuracy": 0.8903296359943759
+    },
+    {
+      "path": "kaggle_kernel_outputs/donut_base_v1/checkpoint/best.pt",
+      "sha256": "eca5fe3603da166945e477aeeb6484e3a61fcad61f65234ce0e5c0251c501101",
+      "weight": 0.2,
+      "epoch": 8,
+      "image_size": 320,
+      "validation_accuracy": 0.8576784877362912
+    }
+  ],
+  "minimum_validation": 1.0,
+  "test_predicted": false,
+  "device": "cpu"
+}

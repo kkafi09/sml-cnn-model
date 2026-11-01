@@ -1,6 +1,6 @@
 {
   "experiment_id": "ensemble_ditbase_donut_resnet50_320_v1",
-  "status": "VALIDATION_GATE_PASSED_TEST_PREDICTION_PENDING",
+  "status": "SUBMITTED_PENDING_SCORING",
   "validation_split": {
     "strategy": "stratified train_test_split",
     "seed": 42,
@@ -36,8 +36,8 @@
   },
   "test_ensemble_method": {
     "dit_base": "softmax probabilities",
-    "donut_base": "one-hot vector from the generated test class predictions",
-    "resnet50_320": "softmax probabilities"
+    "donut_base": "one-hot class vote",
+    "resnet50_320": "one-hot class vote"
   },
   "test_method_validation_grid": {
     "step": 0.01,
@@ -57,15 +57,16 @@
   "rank_1_public_score_at_last_check": 0.90046,
   "rank_2_public_score_at_last_check": 0.89711,
   "submission_gate_passed": true,
-  "test_predicted": false,
-  "submission_csv": null,
-  "submission_ref": null,
+  "test_predicted": true,
+  "submission_csv": "submissions/ensemble_ditbase_donut_resnet50_320_v1_d06076418f1d.csv",
+  "submission_sha256": "d06076418f1db0bc5f4b89914071e82625a18f2abbd3fea4df627f7bb997e858",
+  "submission_ref": "57868221",
   "public_score": null,
-  "leaderboard_refresh_required_before_submit": true,
-  "daily_submissions_remaining_at_last_check": 5,
-  "decision": "Generate candidate using the validation-passing soft-DiT plus hard-vote method; refresh leaderboard and daily quota immediately before upload.",
+  "leaderboard_refresh_required_before_submit": false,
+  "daily_submissions_remaining_at_last_check": 4,
+  "decision": "Submitted after refreshed rank-2 score 0.89711 and daily allowance of five were confirmed; Kaggle scoring is pending.",
   "test_probability_cache_status": {
-    "dit_base": "in progress, test rows 0-3200 cached",
+    "dit_base": "complete, 7994 rows cached and assembled",
     "donut_base": "hard predictions already available",
     "resnet50_320": "hard predictions already available"
   },
