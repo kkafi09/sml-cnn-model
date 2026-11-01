@@ -189,7 +189,7 @@ def main() -> None:
             checkpoint = torch.load(path, map_location="cpu", weights_only=True)
             architecture = checkpoint.get("architecture")
             if (checkpoint.get("seed") != 42 or checkpoint.get("num_classes") != 16
-                    or architecture not in {"resnet18", "resnet50", "dit_base", "dit_large"}
+                    or architecture not in {"resnet18", "resnet50", "dit_base", "dit_large", "donut_base"}
                     or int(checkpoint["epoch"]) != int(member["epoch"])
                     or int(checkpoint["image_size"]) != int(member["image_size"])
                     or abs(float(checkpoint["validation_accuracy"]) - float(member["validation_accuracy"])) > 2 / 6401):
@@ -250,7 +250,8 @@ def main() -> None:
         raise RuntimeError("Submit returned without a ref; inspect Kaggle before retrying")
     config = configuration
     pretrained_weights = (
-        f"{model.replace('_', '-')} self-supervised IIT-CDIP" if model.startswith("dit_") else "ImageNet"
+        ("Donut-base self-supervised IIT-CDIP+SynthDoG" if model == "donut_base" else
+         f"{model.replace('_', '-')} self-supervised IIT-CDIP" if model.startswith("dit_") else "ImageNet")
     )
     record = {"submission_ref": match.group(1), "submitted_at_utc": datetime.now(timezone.utc).isoformat(),
               "competition": COMPETITION, "model": model, "pretrained_weights": pretrained_weights,

@@ -5,16 +5,16 @@ from torchvision.models import ResNet18_Weights, ResNet50_Weights, resnet18, res
 
 
 class DocumentCNN(nn.Module):
-    """ImageNet-initialized ResNet that predicts document classes."""
+    """Image classifier using ResNet or document-pretrained Transformer backbones."""
 
     def __init__(self, num_classes: int = 16, pretrained: bool = True,
                  architecture: str = "resnet18") -> None:
-        """Initialize an ImageNet ResNet or document-pretrained DiT classifier.
+        """Initialize a ResNet, DiT, or Donut document-image classifier.
 
         Args:
             num_classes: Number of document categories to predict.
             pretrained: Start from ImageNet weights when true.
-            architecture: ``resnet18``, ``resnet50``, ``dit_base``, or ``dit_large``.
+            architecture: ``resnet18``, ``resnet50``, ``dit_base``, ``dit_large``, or ``donut_base``.
         """
         super().__init__()
         self.architecture = architecture
@@ -42,6 +42,22 @@ class DocumentCNN(nn.Module):
                 config.id2label = {index: str(index) for index in range(num_classes)}
                 config.label2id = {str(index): index for index in range(num_classes)}
                 self.backbone = BeitForImageClassification(config)
+        elif architecture == "donut_base":
+            try:
+                from transformers import DonutSwinModel, VisionEncoderDecoderConfig, VisionEncoderDecoderModel
+            except ImportError as error:
+                raise ImportError("Install transformers to use the Donut-base model") from error
+            model_name = "naver-clova-ix/donut-base"
+            if pretrained:
+                document_model = VisionEncoderDecoderModel.from_pretrained(model_name)
+                self.backbone = document_model.encoder
+                hidden_size = document_model.config.encoder.hidden_size
+                del document_model
+            else:
+                config = VisionEncoderDecoderConfig.from_pretrained(model_name)
+                self.backbone = DonutSwinModel(config.encoder)
+                hidden_size = config.encoder.hidden_size
+            self.classifier = nn.Linear(hidden_size, num_classes)
         else:
             raise ValueError(f"Unsupported architecture: {architecture}")
         if architecture in {"resnet18", "resnet50"}:
@@ -52,4 +68,10 @@ class DocumentCNN(nn.Module):
         """Compute unnormalized class scores for a batch of RGB images."""
         if self.architecture in {"dit_base", "dit_large"}:
             return self.backbone(pixel_values=images).logits
+        if self.architecture == "donut_base":
+            outputs = self.backbone(pixel_values=images)
+            features = outputs.pooler_output
+            if features is None:
+                features = outputs.last_hidden_state.mean(dim=1)
+            return self.classifier(features)
         return self.backbone(images)

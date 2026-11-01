@@ -16,7 +16,7 @@ def main() -> None:
     parser.add_argument("--output", type=Path, default=Path("kaggle_kernel"))
     parser.add_argument("--epochs", type=int, default=12)
     parser.add_argument("--patience", type=int, default=3)
-    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base", "dit_large"), default="resnet18")
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base", "dit_large", "donut_base"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer3")
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--batch-size", type=int, default=32)
@@ -46,7 +46,7 @@ print(f"PyTorch: {torch.__version__}; CUDA available: {torch.cuda.is_available()
 if not torch.cuda.is_available():
     raise RuntimeError("This experiment requires a GPU; stopping before training")
 print(f"GPU: {torch.cuda.get_device_name(0)}", flush=True)
-if ARCHITECTURE.startswith("dit_"):
+if ARCHITECTURE.startswith("dit_") or ARCHITECTURE == "donut_base":
     try:
         import transformers
     except ImportError:

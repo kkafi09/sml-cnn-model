@@ -55,13 +55,26 @@
       "train_accuracy": 0.8144,
       "validation_loss": 0.7466,
       "validation_accuracy": 0.8566
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.7884,
+      "train_accuracy": 0.8416,
+      "validation_loss": 0.7134,
+      "validation_accuracy": 0.8691
     }
   ],
-  "best_epoch_observed": 2,
-  "best_validation_accuracy_observed": 0.8566,
+  "best_epoch_observed": 3,
+  "best_validation_accuracy_observed": 0.8691,
   "test_prediction_rows": null,
   "checkpoint_recovered": false,
-  "submission_decision": "No submission: best observed validation 0.8566 remains below DiT-base best 0.89033 and public rank-2 snapshot 0.89711.",
+  "submission_decision": "No submission: DiT-large best validation 0.8691 remains below DiT-base validation 0.89033; latest public rank-2 score could not be refreshed because leaderboard access returned 403. Submission quota check returned 5 available.",
   "confirmed_accelerator": "Tesla T4",
-  "cuda_available": true
+  "cuda_available": true,
+  "leaderboard_refresh": {
+    "checked_at_utc": "2026-11-01",
+    "status": "UNAVAILABLE",
+    "reason": "Kaggle CLI leaderboard returned 403 Forbidden and requested acceptance of competition rules; public rank-2 threshold not refreshed."
+  },
+  "daily_submissions_remaining_at_last_check": 5
 }

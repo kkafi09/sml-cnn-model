@@ -93,7 +93,7 @@ def main() -> None:
     parser.add_argument("--image-size", type=int, default=224)
     parser.add_argument("--workers", type=int, default=2)
     parser.add_argument("--seed", type=int, default=42)
-    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base", "dit_large"), default="resnet18")
+    parser.add_argument("--architecture", choices=("resnet18", "resnet50", "dit_base", "dit_large", "donut_base"), default="resnet18")
     parser.add_argument("--unfreeze-from", choices=("layer2", "layer3", "layer4"), default="layer4")
     parser.add_argument("--learning-rate", type=float, default=1e-4)
     parser.add_argument("--label-smoothing", type=float, default=0.0)
@@ -147,7 +147,9 @@ def main() -> None:
 
     model = DocumentCNN(pretrained=True, architecture=args.architecture).to(device)
     is_dit = args.architecture.startswith("dit_")
-    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda") if is_dit else None
+    is_donut = args.architecture == "donut_base"
+    is_document_transformer = is_dit or is_donut
+    scaler = torch.amp.GradScaler("cuda", enabled=device.type == "cuda") if is_document_transformer else None
     if is_dit:
         if args.architecture == "dit_large":
             model.backbone.gradient_checkpointing_enable()
@@ -155,6 +157,15 @@ def main() -> None:
             [
                 {"params": model.backbone.beit.parameters(), "lr": args.learning_rate},
                 {"params": model.backbone.classifier.parameters(), "lr": args.learning_rate * 5},
+            ],
+            weight_decay=0.05,
+        )
+    elif is_donut:
+        model.backbone.gradient_checkpointing_enable()
+        optimizer = torch.optim.AdamW(
+            [
+                {"params": model.backbone.parameters(), "lr": args.learning_rate},
+                {"params": model.classifier.parameters(), "lr": args.learning_rate * 5},
             ],
             weight_decay=0.05,
         )
@@ -233,7 +244,7 @@ def main() -> None:
                     "epoch": epoch,
                     "validation_accuracy": validation_accuracy,
                     "architecture": args.architecture,
-                    "unfreeze_from": "all" if is_dit else args.unfreeze_from,
+                    "unfreeze_from": "all" if is_document_transformer else args.unfreeze_from,
                     "learning_rate": args.learning_rate,
                     "label_smoothing": args.label_smoothing,
                     "preserve_aspect_ratio": args.preserve_aspect_ratio,
@@ -269,15 +280,17 @@ def main() -> None:
                 "model": (
                     f"{args.architecture.replace('_', '-')} self-supervised document-image initialization; all layers fine-tuned"
                     if is_dit else
+                    "Donut-base self-supervised document-image encoder; all encoder layers fine-tuned"
+                    if is_donut else
                     f"{args.architecture} ImageNet initialization; {args.unfreeze_from} onward fine-tuned"
                 ),
                 "configuration": {"epochs": args.epochs, "batch_size": args.batch_size,
                     "image_size": args.image_size, "learning_rate": args.learning_rate,
                     "label_smoothing": args.label_smoothing,
-                    "unfreeze_from": "all" if is_dit else args.unfreeze_from, "patience": args.patience,
+                    "unfreeze_from": "all" if is_document_transformer else args.unfreeze_from, "patience": args.patience,
                     "architecture": args.architecture,
                     "preserve_aspect_ratio": args.preserve_aspect_ratio,
-                    "gradient_checkpointing": args.architecture == "dit_large"},
+                    "gradient_checkpointing": args.architecture in {"dit_large", "donut_base"}},
                 "corrupt_image_count": len(corrupt_ids),
                 "corrupt_image_ids": sorted(corrupt_ids),
                 "corrupt_train_image_ids": sorted(train_corrupt_ids),
