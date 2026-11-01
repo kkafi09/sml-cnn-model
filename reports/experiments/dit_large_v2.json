@@ -33,5 +33,18 @@
   "cuda_available": true,
   "transformers_version": "5.20.2",
   "training_started": true,
-  "requested_kernel_status": "RUNNING"
+  "requested_kernel_status": "RUNNING",
+  "latest_training_progress": {
+    "epoch": 1,
+    "batch": 1100,
+    "total_batches": 3201,
+    "train_loss": 1.7377,
+    "train_accuracy": 0.5152,
+    "phase": "epoch_1_training"
+  },
+  "latest_log_check": {
+    "checked_at_utc": "2026-11-01T08:48:00Z",
+    "status": "RUNNING",
+    "confirmed_accelerator": "Tesla T4"
+  }
 }
