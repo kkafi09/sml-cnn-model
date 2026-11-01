@@ -1,6 +1,6 @@
 {
   "experiment_id": "dit_large_v2",
-  "status": "READY_TO_PUSH",
+  "status": "RUNNING",
   "kernel_ref": "muhammadkafanalkafi/document-classification-dit-large-v2",
   "architecture": "dit_large",
   "pretrained_weights": "microsoft/dit-large self-supervised IIT-CDIP; no RVL-CDIP supervised fine-tuning",
@@ -27,5 +27,11 @@
   "submission_gate": "Submit only if this run or a verified ensemble beats 0.8903296359943759 validation and refreshed current rank-2 public score.",
   "submission_ref": null,
   "public_score": null,
-  "observed_epochs": []
+  "observed_epochs": [],
+  "kernel_version": 1,
+  "confirmed_accelerator": "Tesla T4",
+  "cuda_available": true,
+  "transformers_version": "5.20.2",
+  "training_started": true,
+  "requested_kernel_status": "RUNNING"
 }
