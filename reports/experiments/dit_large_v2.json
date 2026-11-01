@@ -35,6 +35,14 @@
       "validation_loss": 0.8211,
       "validation_accuracy": 0.8421,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.8568,
+      "train_accuracy": 0.8224,
+      "validation_loss": 0.7372,
+      "validation_accuracy": 0.8608,
+      "corrupt_images": 1
     }
   ],
   "kernel_version": 1,
@@ -44,17 +52,17 @@
   "training_started": true,
   "requested_kernel_status": "RUNNING",
   "latest_training_progress": {
-    "epoch": 2,
-    "batch": 3100,
+    "epoch": 3,
+    "batch": 100,
     "total_batches": 3201,
-    "train_loss": 0.8562,
-    "train_accuracy": 0.8226,
-    "phase": "epoch_2_training"
+    "train_loss": 0.7734,
+    "train_accuracy": 0.84,
+    "phase": "epoch_3_training"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T10:40:00Z",
+    "checked_at_utc": "2026-11-01T10:50:00Z",
     "status": "RUNNING",
-    "confirmed_accelerator": "Tesla T4"
+    "observed_epoch_2_validation_accuracy": 0.8608
   },
-  "best_validation_accuracy_observed": 0.8421
+  "best_validation_accuracy_observed": 0.8608
 }
