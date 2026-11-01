@@ -1,6 +1,6 @@
 {
   "experiment_id": "donut_base_v1",
-  "status": "RUNNING",
+  "status": "TRAINING_COMPLETE_PREDICTING_TEST",
   "kernel_ref": "muhammadkafanalkafi/document-classification-donut-base-v1",
   "architecture": "donut_base",
   "pretrained_weights": "naver-clova-ix/donut-base self-supervised IIT-CDIP+SynthDoG; encoder only",
@@ -116,9 +116,17 @@
       "validation_loss": 0.784,
       "validation_accuracy": 0.8475,
       "corrupt_images": 1
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.516,
+      "train_accuracy": 0.9409,
+      "validation_loss": 0.7768,
+      "validation_accuracy": 0.8577,
+      "corrupt_images": 1
     }
   ],
-  "best_validation_accuracy_observed": 0.8489,
+  "best_validation_accuracy_observed": 0.8577,
   "observed_batches": [
     {
       "batch": 100,
@@ -138,16 +146,17 @@
   ],
   "latest_training_progress": {
     "epoch": 8,
-    "batch": 2000,
+    "batch": 6400,
     "total_batches": 6401,
-    "train_loss": 0.5289,
-    "train_accuracy": 0.9362,
-    "phase": "epoch_8_training"
+    "train_loss": 0.516,
+    "train_accuracy": 0.9409,
+    "phase": "training_complete; test prediction/output generation in progress"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T08:25:00Z",
+    "checked_at_utc": "2026-11-01T08:45:00Z",
     "status": "RUNNING",
-    "epoch_8_batch": 2000,
-    "train_accuracy": 0.9362
-  }
+    "observed_epoch_8_validation_accuracy": 0.8577,
+    "best_validation_accuracy": 0.8577
+  },
+  "submission_decision": "No submission: best validation 0.8577 is below previous best 0.8903296359943759 and public rank-2 0.89711."
 }
