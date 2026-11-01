@@ -122,16 +122,16 @@
   ],
   "latest_training_progress": {
     "epoch": 6,
-    "batch": 500,
+    "batch": 2000,
     "total_batches": 6401,
-    "train_loss": 0.6362,
-    "train_accuracy": 0.896,
+    "train_loss": 0.6263,
+    "train_accuracy": 0.8988,
     "phase": "epoch_6_training"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T07:13:00Z",
+    "checked_at_utc": "2026-11-01T07:25:00Z",
     "status": "RUNNING",
-    "observed_epoch_5_validation_accuracy": 0.8311,
-    "best_validation_accuracy": 0.8327
+    "epoch_6_batch": 2000,
+    "train_accuracy": 0.8988
   }
 }
