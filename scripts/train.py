@@ -32,6 +32,7 @@ def run_epoch(
         criterion: Classification loss function.
         device: CPU or CUDA device used for computation.
         optimizer: Optimizer for training; omit it for validation.
+        scaler: Mixed-precision gradient scaler, if enabled.
 
     Returns:
         Mean loss, categorical accuracy, and IDs of unreadable images.
@@ -44,7 +45,7 @@ def run_epoch(
     skipped_ids = []
     context = torch.enable_grad if training else torch.no_grad
     with context():
-        for images, labels, batch_skipped_ids in loader:
+        for batch_index, (images, labels, batch_skipped_ids) in enumerate(loader, start=1):
             skipped_ids.extend(batch_skipped_ids)
             if images is None:
                 continue
@@ -69,6 +70,13 @@ def run_epoch(
             loss_sum += loss.item() * batch_size
             correct += (logits.argmax(dim=1) == labels).sum().item()
             sample_count += batch_size
+            if training and scaler is not None and batch_index % 100 == 0:
+                print(
+                    f"train_batch {batch_index}/{len(loader)}: "
+                    f"loss={loss_sum / sample_count:.4f} "
+                    f"accuracy={correct / sample_count:.4f}",
+                    flush=True,
+                )
     if sample_count == 0:
         raise RuntimeError("No readable images were available for this epoch")
     return loss_sum / sample_count, correct / sample_count, skipped_ids
