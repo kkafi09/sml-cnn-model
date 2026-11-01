@@ -1,0 +1,63 @@
+{
+  "experiment_id": "donut_base_v1",
+  "status": "RUNNING",
+  "kernel_ref": "muhammadkafanalkafi/document-classification-donut-base-v1",
+  "architecture": "donut_base",
+  "pretrained_weights": "naver-clova-ix/donut-base self-supervised IIT-CDIP+SynthDoG; encoder only",
+  "pretrained_label_finetuning": false,
+  "requested_accelerator": "NvidiaTeslaT4",
+  "image_size": 320,
+  "preserve_aspect_ratio": true,
+  "normalization": "ImageNet",
+  "batch_size": 4,
+  "learning_rate_backbone": 1e-05,
+  "learning_rate_classifier": 5e-05,
+  "optimizer": "AdamW",
+  "weight_decay": 0.05,
+  "label_smoothing": 0.05,
+  "seed": 42,
+  "validation_split": 0.2,
+  "max_epochs": 8,
+  "early_stopping_patience": 2,
+  "gradient_checkpointing": true,
+  "mixed_precision": "CUDA AMP",
+  "transformers_version": "5.20.2",
+  "timeout_seconds": 21600,
+  "leaderboard_at_last_check": {
+    "status": "UNAVAILABLE_403",
+    "last_known_rank_2_score": 0.89711
+  },
+  "submission_gate": "Validation must exceed both previous best validation 0.8903296359943759 and refreshed current rank-2 public score; refresh leaderboard and daily allowance before upload.",
+  "daily_submissions_remaining_at_last_check": 5,
+  "kernel_versions": [
+    {
+      "version": 1,
+      "status": "ERROR",
+      "error": "Runner omitted importlib.metadata import; failed before training, no GPU training epochs."
+    },
+    {
+      "version": 2,
+      "status": "ERROR",
+      "transformers_version": "5.20.2",
+      "timeout_seconds": 18000,
+      "runner_import_fix": true,
+      "error": "Image size 224 produced a final Donut Swin feature map smaller than the configured 10x10 attention window; failed during first epoch forward pass."
+    },
+    {
+      "version": 3,
+      "status": "RUNNING",
+      "transformers_version": "5.20.2",
+      "image_size": 320,
+      "batch_size": 4,
+      "timeout_seconds": 21600,
+      "reason_for_config_change": "320x320 yields a 10x10 final feature map matching the pretrained window size.",
+      "kernel_ref": "muhammadkafanalkafi/document-classification-donut-base-v1"
+    }
+  ],
+  "submission_ref": null,
+  "public_score": null,
+  "requested_kernel_status": "RUNNING",
+  "kernel_version": 3,
+  "observed_epochs": [],
+  "best_validation_accuracy_observed": null
+}

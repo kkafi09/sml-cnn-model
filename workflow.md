@@ -102,7 +102,7 @@ Rencana kuota untuk run pertama:
 
 ## 4. Push dan pantau satu run
 
-Perintah berikut mengunggah versi kernel dan langsung meminta run dengan accelerator T4. `--timeout 7200` adalah batas maksimum dua jam untuk run ini; sesuaikan dengan estimasi runtime dan sisa kuota, jangan mengatur batas jauh di atas kebutuhan:
+Perintah berikut mengunggah versi kernel dan langsung meminta run dengan accelerator T4. `--timeout` adalah batas maksimum runtime kernel, bukan sekadar waktu menunggu CLI. Setel sesuai estimasi run dan sisa kuota; run yang terpotong karena batas ini dapat kehilangan epoch yang belum selesai:
 
 ```bash
 kaggle kernels push -p kaggle_kernel --accelerator NvidiaTeslaT4 --timeout 7200
@@ -306,14 +306,14 @@ DiT-large (`microsoft/dit-large`) adalah kandidat pretrained self-supervised pad
 
 Ambang validation harus dibandingkan di split seed 42 yang sama. `scripts/submit_candidate.py --minimum-validation <skor-publik-rank-2-terkini>` menambah gate konservatif di atas syarat mengalahkan semua validation model sebelumnya. Public score dan validation accuracy berasal dari sampel berbeda, jadi lolosnya gate bukan jaminan posisi; cek leaderboard dan kuota sekali lagi sebelum submit. Catat skor/rank yang digunakan di laporan eksperimen.
 
-Run DiT-large v1 saat ini: kernel `muhammadkafanalkafi/document-classification-dit-large-v1`, T4 diminta, 224px, batch 8, 8 epoch maksimum, learning rate `1e-5`, label smoothing `0.05`, seed 42, gradient checkpointing aktif. Lihat laporan live `reports/experiments/dit_large_v1.json`; jangan submit sebelum status complete, checkpoint/prediksi tervalidasi, dan syarat score terpenuhi.
+Run DiT-large v1: kernel `muhammadkafanalkafi/document-classification-dit-large-v1`, T4, 224px, batch 8, 8 epoch maksimum, learning rate `1e-5`, label smoothing `0.05`, seed 42, gradient checkpointing aktif. Run pertama berakhir saat batas `--timeout 7200` tercapai setelah epoch 4; validation terbaik yang tercatat `0.8755`. Laporan ada di `reports/experiments/dit_large_v1.json`. Untuk run transformer berikutnya gunakan timeout berdasarkan runtime penuh, bukan 7200 detik.
 
 
 ## Donut-base sebagai kandidat berikutnya
 
 Jika DiT-large tidak melewati gate, kandidat berikut adalah encoder visual Donut-base (`naver-clova-ix/donut-base`) dengan classifier 16 kelas. Checkpoint base dilatih self-supervised menggunakan IIT-CDIP dan SynthDoG; jangan memakai checkpoint Donut yang sudah fine-tuned pada label RVL-CDIP karena label benchmark itu dapat membocorkan target evaluasi. Donut memakai encoder Swin khusus dokumen dan decoder teks; implementasi proyek hanya mempertahankan encoder visual saat training klasifikasi. Referensi: [repo Donut resmi](https://github.com/clovaai/donut), [dokumentasi Transformers Donut](https://huggingface.co/docs/transformers/model_doc/donut), [model card Donut-base](https://huggingface.co/naver-clova-ix/donut-base).
 
-Konfigurasi awal: split stratified seed 42 yang sama, input 224px dengan padding putih untuk mempertahankan rasio halaman, batch 8, AdamW dengan backbone `1e-5`, head `5e-5`, label smoothing `0.05`, maksimum 8 epoch, patience 2, AMP dan gradient checkpointing. Normalisasi tetap ImageNet. Catat validation accuracy dan bandingkan dengan DiT-base `0.8903296` serta public rank #2 terbaru sebelum memutuskan submission. Nilai 95.3% RVL-CDIP yang disebut pada dokumentasi Donut berasal dari model fine-tuned benchmark; itu bukan skor yang diharapkan dari base checkpoint dan tidak menjadi dasar klaim hasil proyek.
+Konfigurasi awal: split stratified seed 42 yang sama, input 320px dengan padding putih untuk mempertahankan rasio halaman, batch 4, AdamW dengan backbone `1e-5`, head `5e-5`, label smoothing `0.05`, maksimum 8 epoch, patience 2, AMP dan gradient checkpointing. Ukuran 320 membuat feature map akhir 10×10, sesuai dengan window Swin Donut-base berukuran 10. Normalisasi tetap ImageNet. Catat validation accuracy dan bandingkan dengan DiT-base `0.8903296` serta public rank #2 terbaru sebelum memutuskan submission. Nilai 95.3% RVL-CDIP yang disebut pada dokumentasi Donut berasal dari model fine-tuned benchmark; itu bukan skor yang diharapkan dari base checkpoint dan tidak menjadi dasar klaim hasil proyek.
 
 Contoh staging (jalankan setelah kernel DiT-large selesai agar tidak memakai dua GPU Kaggle bersamaan):
 
@@ -323,14 +323,14 @@ Contoh staging (jalankan setelah kernel DiT-large selesai agar tidak memakai dua
   --slug document-classification-donut-base-v1 \
   --output kaggle_kernel_donut_base_v1 \
   --architecture donut_base \
-  --image-size 224 \
-  --batch-size 8 \
+  --image-size 320 \
+  --batch-size 4 \
   --epochs 8 \
   --patience 2 \
   --learning-rate 0.00001 \
   --label-smoothing 0.05 \
   --preserve-aspect-ratio
-kaggle kernels push -p kaggle_kernel_donut_base_v1 --accelerator NvidiaTeslaT4 --timeout 7200
+kaggle kernels push -p kaggle_kernel_donut_base_v1 --accelerator NvidiaTeslaT4 --timeout 18000
 ```
 
 Pantau dengan `kaggle kernels status muhammadkafanalkafi/document-classification-donut-base-v1` dan `kaggle kernels logs -f muhammadkafanalkafi/document-classification-donut-base-v1`; ambil artefak setelah run selesai melalui `kaggle kernels output ... -p kaggle_kernel_outputs/donut_base_v1`.

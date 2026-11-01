@@ -1,13 +1,13 @@
 {
   "experiment_id": "dit_large_v1",
-  "status": "RUNNING",
+  "status": "CANCEL_ACKNOWLEDGED",
   "kernel_ref": "muhammadkafanalkafi/document-classification-dit-large-v1",
   "kernel_version": 1,
   "architecture": "dit_large",
   "pretrained_weights": "microsoft/dit-large self-supervised IIT-CDIP",
   "pretrained_label_finetuning": false,
   "requested_accelerator": "NvidiaTeslaT4",
-  "requested_kernel_status": "RUNNING",
+  "requested_kernel_status": "CANCEL_ACKNOWLEDGED",
   "image_size": 224,
   "batch_size": 8,
   "learning_rate_backbone": 1e-05,
@@ -62,13 +62,20 @@
       "train_accuracy": 0.8416,
       "validation_loss": 0.7134,
       "validation_accuracy": 0.8691
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.7346,
+      "train_accuracy": 0.861,
+      "validation_loss": 0.696,
+      "validation_accuracy": 0.8755
     }
   ],
-  "best_epoch_observed": 3,
-  "best_validation_accuracy_observed": 0.8691,
+  "best_epoch_observed": 4,
+  "best_validation_accuracy_observed": 0.8755,
   "test_prediction_rows": null,
-  "checkpoint_recovered": false,
-  "submission_decision": "No submission: DiT-large best validation 0.8691 remains below DiT-base validation 0.89033; latest public rank-2 score could not be refreshed because leaderboard access returned 403. Submission quota check returned 5 available.",
+  "checkpoint_recovered": true,
+  "submission_decision": "No submission: validation 0.8755 is below DiT-base best 0.8903296 and the last known rank-2 score 0.89711; run ended at configured 7200-second runtime limit.",
   "confirmed_accelerator": "Tesla T4",
   "cuda_available": true,
   "leaderboard_refresh": {
@@ -76,5 +83,13 @@
     "status": "UNAVAILABLE",
     "reason": "Kaggle CLI leaderboard returned 403 Forbidden and requested acceptance of competition rules; public rank-2 threshold not refreshed."
   },
-  "daily_submissions_remaining_at_last_check": 5
+  "daily_submissions_remaining_at_last_check": 5,
+  "actual_epochs_completed": 4,
+  "kernel_stop": {
+    "reason": "Kaggle run reached its configured --timeout 7200 seconds after epoch 4; terminal status CANCEL_ACKNOWLEDGED.",
+    "last_log_elapsed_seconds": 6928.31,
+    "checkpoint_recovered": true,
+    "output_download_status": "COMPLETE"
+  },
+  "checkpoint_path": "kaggle_kernel_outputs/dit_large_v1/checkpoint/best.pt"
 }

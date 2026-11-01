@@ -3,7 +3,6 @@
 import argparse
 import base64
 import io
-import importlib.metadata
 import json
 from pathlib import Path
 import zipfile
@@ -37,6 +36,7 @@ def main() -> None:
     runner = '''"""Train the selected model and generate a competition prediction file."""
 import base64
 import io
+import importlib.metadata
 from pathlib import Path
 import subprocess
 import sys
