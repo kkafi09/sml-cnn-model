@@ -25,7 +25,7 @@
   "timeout_seconds": 21600,
   "leaderboard_at_last_check": {
     "status": "AVAILABLE",
-    "checked_at_utc": "2026-11-01T05:26:52Z",
+    "checked_at_utc": "2026-11-01T06:14:05Z",
     "rank_1_score": 0.90046,
     "rank_2_score": 0.89711
   },
@@ -95,5 +95,11 @@
     "train_loss": 1.0122,
     "train_accuracy": 0.7664,
     "phase": "epoch_2_training_complete; awaiting validation metrics"
+  },
+  "latest_log_check": {
+    "checked_at_utc": "2026-11-01T06:15:05Z",
+    "status": "RUNNING",
+    "new_output_since_epoch_2_training_complete": false,
+    "note": "Kaggle logs have not yet exposed validation progress; output artifacts unavailable while kernel is running."
   }
 }
