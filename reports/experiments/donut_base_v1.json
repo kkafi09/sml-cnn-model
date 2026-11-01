@@ -78,9 +78,9 @@
     }
   ],
   "latest_training_progress": {
-    "batch": 4500,
+    "batch": 5100,
     "total_batches": 6401,
-    "train_loss": 1.5945,
-    "train_accuracy": 0.554
+    "train_loss": 1.5516,
+    "train_accuracy": 0.5708
   }
 }
