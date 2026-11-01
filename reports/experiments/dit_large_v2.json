@@ -27,7 +27,16 @@
   "submission_gate": "Submit only if this run or a verified ensemble beats 0.8903296359943759 validation and refreshed current rank-2 public score.",
   "submission_ref": null,
   "public_score": null,
-  "observed_epochs": [],
+  "observed_epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.2792,
+      "train_accuracy": 0.6802,
+      "validation_loss": 0.8211,
+      "validation_accuracy": 0.8421,
+      "corrupt_images": 1
+    }
+  ],
   "kernel_version": 1,
   "confirmed_accelerator": "Tesla T4",
   "cuda_available": true,
@@ -35,16 +44,17 @@
   "training_started": true,
   "requested_kernel_status": "RUNNING",
   "latest_training_progress": {
-    "epoch": 1,
-    "batch": 3100,
+    "epoch": 2,
+    "batch": 100,
     "total_batches": 3201,
-    "train_loss": 1.2898,
-    "train_accuracy": 0.6765,
-    "phase": "epoch_1_training"
+    "train_loss": 0.8926,
+    "train_accuracy": 0.8063,
+    "phase": "epoch_2_training"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T09:25:00Z",
+    "checked_at_utc": "2026-11-01T09:35:00Z",
     "status": "RUNNING",
-    "confirmed_accelerator": "Tesla T4"
-  }
+    "observed_epoch_1_validation_accuracy": 0.8421
+  },
+  "best_validation_accuracy_observed": 0.8421
 }
