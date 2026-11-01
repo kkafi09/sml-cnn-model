@@ -90,10 +90,10 @@
   ],
   "latest_training_progress": {
     "epoch": 2,
-    "batch": 3200,
+    "batch": 6400,
     "total_batches": 6401,
-    "train_loss": 1.0434,
-    "train_accuracy": 0.7563,
-    "phase": "epoch_2_training"
+    "train_loss": 1.0122,
+    "train_accuracy": 0.7664,
+    "phase": "epoch_2_training_complete; awaiting validation metrics"
   }
 }
