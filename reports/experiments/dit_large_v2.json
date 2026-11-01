@@ -1,6 +1,6 @@
 {
   "experiment_id": "dit_large_v2",
-  "status": "SUBMITTED_PENDING_SCORING",
+  "status": "SCORED_TOP_2",
   "kernel_ref": "muhammadkafanalkafi/document-classification-dit-large-v2",
   "architecture": "dit_large",
   "pretrained_weights": "microsoft/dit-large self-supervised IIT-CDIP; no RVL-CDIP supervised fine-tuning",
@@ -26,7 +26,7 @@
   "daily_submissions_remaining_at_last_check": 5,
   "submission_gate": "Submit only if this run or a verified ensemble beats 0.8903296359943759 validation and refreshed current rank-2 public score.",
   "submission_ref": "57871182",
-  "public_score": null,
+  "public_score": 0.89753,
   "observed_epochs": [
     {
       "epoch": 1,
@@ -123,6 +123,11 @@
   "submission_csv": "submissions/dit_large_v2_44d3276e318d.csv",
   "submission_sha256": "44d3276e318d3605575e39d9ec42fc2af7256dd30a9b9e0905fb16b34e90ac7d",
   "private_score": null,
-  "submission_status": "PENDING",
-  "daily_submissions_remaining_after_submit": 3
+  "submission_status": "COMPLETE",
+  "daily_submissions_remaining_after_submit": 3,
+  "leaderboard_rank_after_submission": 2,
+  "rank_1_public_score_after_submission": 0.90046,
+  "rank_2_public_score_before_submission": 0.89711,
+  "decision": "Public score 0.89753 placed the team at rank 2 on the refreshed leaderboard; top-2 objective reached.",
+  "kernel_status_after_prediction": "RUNNING"
 }
