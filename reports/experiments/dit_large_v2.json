@@ -53,14 +53,14 @@
   "requested_kernel_status": "RUNNING",
   "latest_training_progress": {
     "epoch": 3,
-    "batch": 2000,
+    "batch": 2400,
     "total_batches": 3201,
-    "train_loss": 0.7624,
-    "train_accuracy": 0.8529,
+    "train_loss": 0.7633,
+    "train_accuracy": 0.8518,
     "phase": "epoch_3_training"
   },
   "latest_log_check": {
-    "checked_at_utc": "2026-11-01T11:00:00Z",
+    "checked_at_utc": "2026-11-01T11:15:00Z",
     "status": "RUNNING",
     "confirmed_accelerator": "Tesla T4"
   },
