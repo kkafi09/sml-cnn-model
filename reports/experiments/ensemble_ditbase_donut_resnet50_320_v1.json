@@ -65,7 +65,7 @@
   "daily_submissions_remaining_at_last_check": 5,
   "decision": "Generate candidate using the validation-passing soft-DiT plus hard-vote method; refresh leaderboard and daily quota immediately before upload.",
   "test_probability_cache_status": {
-    "dit_base": "in progress, test rows 0-800 cached",
+    "dit_base": "in progress, test rows 800-1600 cached",
     "donut_base": "hard predictions already available",
     "resnet50_320": "hard predictions already available"
   },
