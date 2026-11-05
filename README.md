@@ -62,7 +62,7 @@ Label kompetisi adalah integer 0–15 dengan mapping berikut:
 5. Pilih model berdasarkan hasil validation, lalu prediksi label test.
 6. Buat submission dengan kolom persis `id,label`, ID dari `test.csv`, dan label integer 0–15. Validasi jumlah baris 7.994, ID tidak hilang/duplikat, dan label tidak kosong.
 
-Lihat [AGENTS.md](AGENTS.md) untuk alur kerja agent dan [rules.md](rules.md) untuk ketentuan tugas. Update README dengan hasil eksperimen dan interpretasinya setelah training benar-benar dilakukan. Belum ada skor model yang dilaporkan di repository ini.
+Lihat [AGENTS.md](AGENTS.md) untuk alur kerja agent dan [rules.md](rules.md) untuk ketentuan tugas. Hasil eksperimen dan interpretasinya tersedia pada bagian di bawah.
 
 ## Struktur repository
 
@@ -85,7 +85,7 @@ Lihat [AGENTS.md](AGENTS.md) untuk alur kerja agent dan [rules.md](rules.md) unt
 ├── src/document_classifier/
 │   ├── data.py              # CSV validation and PyTorch Dataset
 │   ├── transforms.py        # image resizing and augmentation
-│   ├── model.py             # CNN architecture
+│   ├── model.py             # arsitektur CNN dan Transformer
 │   └── submission.py        # submission creation/validation
 ├── checkpoint/             # bobot hasil training; diabaikan Git
 ├── submissions/
@@ -105,7 +105,15 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-Notebook berisi langkah awal EDA, validasi split stratified, dan pemeriksaan submission. Training dan prediksi dijalankan dari root repository:
+Untuk pengumpulan dan peninjauan, jalankan notebook berikut secara berurutan dari root repository atau direktori `notebooks/`:
+
+1. [01_eda.ipynb](notebooks/01_eda.ipynb) membaca CSV, memeriksa distribusi kelas, dan menampilkan contoh halaman.
+2. [02_modeling.ipynb](notebooks/02_modeling.ipynb) menjelaskan split, pipeline PyTorch, konfigurasi DiT-large, dan hasil validation per epoch. Run ulang tersedia dengan `RUN_TRAINING = True` dan memerlukan GPU, data, serta akses bobot pretrained.
+3. [03_submission.ipynb](notebooks/03_submission.ipynb) memeriksa CSV yang dikirim dan menyediakan inferensi ulang dengan `RUN_INFERENCE = True` jika checkpoint tersedia.
+
+Jalankan `jupyter lab` atau `jupyter notebook` setelah instalasi dan ekstraksi data. Kedua opsi run ulang dinonaktifkan secara default; notebook tetap menampilkan metrik historis dan memeriksa CSV yang disimpan di repository. Checkpoint tidak disertakan dalam Git: latih ulang atau unduh output `checkpoint/best.pt` dari kernel Kaggle `muhammadkafanalkafi/document-classification-dit-large-v2`, lalu arahkan `CHECKPOINT_PATH` pada notebook submission ke file tersebut. Pengiriman ke Kaggle dilakukan terpisah sesuai [workflow.md](workflow.md).
+
+Contoh training dan prediksi baseline dari root repository:
 
 ```bash
 python scripts/train.py --epochs 3 --batch-size 32 --image-size 224 --workers 2
@@ -113,6 +121,12 @@ python scripts/predict.py --batch-size 32 --workers 2
 ```
 
 Training memilih checkpoint berdasarkan validation accuracy tertinggi dan menyimpan metrik ke `reports/`. Prediksi memakai checkpoint `checkpoint/best.pt` dan menulis `submissions/submission.csv`.
+
+## Hasil DiT-large untuk pengumpulan
+
+Run `dit_large_v2` menggunakan PyTorch, inisialisasi self-supervised `microsoft/dit-large`, input 224 × 224, split stratified 80/20 dengan seed 42, batch size 8, dan AdamW (learning rate backbone `1e-5`, classifier `5e-5`). Semua layer di-fine-tune. Hasil validation terbaik pada epoch 8 adalah **89,845%** pada 6.401 gambar; train accuracy pada epoch yang sama **90,957%**. Satu gambar training, `train_08795`, gagal didekode sehingga 25.601 dari 25.602 gambar train digunakan. Riwayat epoch dan konfigurasi validation tersedia di [reports/experiments/dit_large_v2/](reports/experiments/dit_large_v2/).
+
+Submission `57871182` menggunakan [CSV DiT-large](submissions/dit_large_v2_44d3276e318d.csv) dan memperoleh **public score 0,89753**. Pada pemeriksaan 2 November 2026 skor tersebut berada di peringkat 3; peringkat dapat berubah. Validation dan public score diukur pada sampel yang berbeda, sedangkan private score belum diverifikasi dalam laporan ini. Selisih train dan validation sekitar 1,11 poin persentase; pemilihan banyak eksperimen pada split validation yang sama dapat membuat estimasi terlalu optimistis.
 
 ## Hasil baseline
 
@@ -217,8 +231,8 @@ Submission ref **57788724** mendapat public score **0,88749 (88,749%)**, menempa
 
 ## DiT-large lanjutan (1 November 2026)
 
-Leaderboard bergerak sejak submission DiT-base: saat dicek, public #1 adalah **0,90046**, #2 **0,89711**, #3 **0,89209**, dan submission kita **0,88749** berada di posisi #4. Kuota hari itu menunjukkan 0/5 submission digunakan. Kandidat DiT-large dari checkpoint self-supervised IIT-CDIP sedang dilatih pada Kaggle T4. Model ini memiliki kapasitas lebih besar daripada DiT-base, dengan fine-tuning seluruh layer, AMP, dan gradient checkpointing. Hasil paper Microsoft pada RVL-CDIP penuh hanya menjadi alasan pemilihan kandidat, bukan prediksi skor kompetisi ini.
+Pada salah satu pemeriksaan sebelum run DiT-large, leaderboard menunjukkan public #1 **0,90046**, #2 **0,89711**, #3 **0,89209**, dan submission kita **0,88749** pada posisi #4. Kandidat DiT-large dari checkpoint self-supervised IIT-CDIP kemudian dilatih pada Kaggle T4. Model ini memiliki kapasitas lebih besar daripada DiT-base, dengan fine-tuning seluruh layer, AMP, dan gradient checkpointing. Hasil paper Microsoft pada RVL-CDIP penuh hanya menjadi alasan pemilihan kandidat, bukan prediksi skor kompetisi ini.
 
-Eksperimen memakai split seed 42 yang sama, input 224px, batch 8, AdamW (`1e-5` backbone dan `5e-5` head), label smoothing `0.05`, maksimum 8 epoch dan patience 2. Catatan live ada di `reports/experiments/dit_large_v1.json`. Submission hanya dilakukan jika validation melewati DiT-base (89,033%) dan angka public rank #2 yang tercatat saat keputusan; leaderboard serta kuota diperiksa ulang sebelum upload.
+Eksperimen memakai split seed 42 yang sama, input 224px, batch 8, AdamW (`1e-5` backbone dan `5e-5` head), label smoothing `0.05`, maksimum 8 epoch dan patience 2. Catatan run awal tersedia di `reports/experiments/dit_large_v1.json`; hasil run v2 yang disubmit dijelaskan pada bagian hasil DiT-large di atas.
 
 **Kandidat lanjutan:** bila DiT-large tidak melampaui ambang submission, workflow menyiapkan Donut-base dengan encoder visual Swin yang pretrained self-supervised pada IIT-CDIP dan SynthDoG. Model Donut yang fine-tuned pada RVL-CDIP tidak digunakan agar label benchmark tidak bocor ke eksperimen. Konfigurasi, perintah staging Kaggle, dan referensi sumber model tercatat di [`workflow.md`](workflow.md).

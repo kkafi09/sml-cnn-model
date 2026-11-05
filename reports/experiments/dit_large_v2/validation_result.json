@@ -1,0 +1,31 @@
+{
+  "best_validation_accuracy": 0.8984533666614591,
+  "best_epoch": 8,
+  "seed": 42,
+  "train_samples": 25602,
+  "train_samples_used": 25601,
+  "validation_samples": 6401,
+  "validation_samples_used": 6401,
+  "device": "cuda",
+  "model": "dit-large self-supervised document-image initialization; all layers fine-tuned",
+  "configuration": {
+    "epochs": 8,
+    "batch_size": 8,
+    "image_size": 224,
+    "learning_rate": 1e-05,
+    "label_smoothing": 0.05,
+    "unfreeze_from": "all",
+    "patience": 2,
+    "architecture": "dit_large",
+    "preserve_aspect_ratio": false,
+    "gradient_checkpointing": true
+  },
+  "corrupt_image_count": 1,
+  "corrupt_image_ids": [
+    "train_08795"
+  ],
+  "corrupt_train_image_ids": [
+    "train_08795"
+  ],
+  "corrupt_validation_image_ids": []
+}
